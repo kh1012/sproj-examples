@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/sproj-examples/static/css/main.76b45b78.css",
-    "main.js": "/sproj-examples/static/js/main.19678bd2.js",
+    "main.css": "/sproj-examples/static/css/main.743b37be.css",
+    "main.js": "/sproj-examples/static/js/main.f4f2e1fa.js",
     "index.html": "/sproj-examples/index.html",
-    "main.76b45b78.css.map": "/sproj-examples/static/css/main.76b45b78.css.map",
-    "main.19678bd2.js.map": "/sproj-examples/static/js/main.19678bd2.js.map"
+    "main.743b37be.css.map": "/sproj-examples/static/css/main.743b37be.css.map",
+    "main.f4f2e1fa.js.map": "/sproj-examples/static/js/main.f4f2e1fa.js.map"
   },
   "entrypoints": [
-    "static/css/main.76b45b78.css",
-    "static/js/main.19678bd2.js"
+    "static/css/main.743b37be.css",
+    "static/js/main.f4f2e1fa.js"
   ]
 }

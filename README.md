@@ -1,2 +1,6 @@
 # :zap: Midas API Plugin Examples
-MIDAS API용 예제가 존재하는 저장소 입니다.
+MIDAS API Plugin 예제들을 기록하는 저장소 입니다.
+
+## Example Demos
+- [Create Alignment Demo](https://kh1012.github.io/sproj-examples/create-alignment)
+- [Load Combination Generator](https://kh1012.github.io/sproj-examples/load-combination-generator)
