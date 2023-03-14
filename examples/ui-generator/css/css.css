@@ -1,0 +1,112 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+:root{
+  --default_padding: 4px;
+  --back_color: #141F2D;
+  --border_color: #38455A;
+  --hover_border_color: #2499F2;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  background-color: bisque;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.main {
+  width: 100vw;
+  height: calc(100vh - 32px);
+  display: flex;
+}
+
+.btnwrap{
+  width: 100%;
+  height: 32px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.sub1 {
+  width: 70%;
+  background-color: antiquewhite;
+}
+
+.sub2 {
+  width: 30%;
+  background-color:#0C141F;
+}
+
+.temp_button{
+  height: 100%;
+}
+
+#ui_result {
+  width: 100%;
+  height: auto;
+  margin: auto;
+}
+
+.block_create {
+  background-color: var(--back_color);
+  width: 90%;
+  height: auto;
+  margin: 5px auto;
+  padding: 2px 5px;
+}
+
+.new_block {
+  background-color: var(--back_color);
+  width: 90%;
+  height: auto;
+  margin: 5px auto;
+  padding: 2px 5px;
+  border: solid 1px var(--border_color);
+}
+
+.layout_selector {
+  width:100%;
+  height: 100%;
+  background: transparent;
+  border: dashed 1px white;
+  text-align: center;
+}
+
+.widget_selector {
+  width:100%;
+  height: auto;
+  background: transparent;
+  text-align: center;
+  border: none;
+}
+
+.layer {
+  width:100%;
+  height: 30px;
+  margin: 4px 0px;
+  display: flex;
+  background-color:#2F3B4C;
+}
+
+.layout_div {
+  background-color: #48525f;
+  border-radius: 3px;
+  width: 100%;
+  height: auto;
+  margin: 0px 4px;
+  display: flex;
+}
+
+#short_cut_check {
+  height: 80%;
+  background-color: gray;
+  border: solid 1px var(--border_color);
+  border-radius: 5px;
+  margin-left: 50px;
+  transition: all 0.2s;
+}
+
+.short_active {
+  background-color: #62bbff !important;
+}
