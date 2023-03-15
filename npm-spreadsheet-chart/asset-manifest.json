@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.258e8f80.css",
-    "main.js": "/static/js/main.57313631.js",
-    "index.html": "/index.html",
-    "main.258e8f80.css.map": "/static/css/main.258e8f80.css.map",
-    "main.57313631.js.map": "/static/js/main.57313631.js.map"
+    "main.css": "/sproj-examples/npm-spreadsheet-chart/static/css/main.258e8f80.css",
+    "main.js": "/sproj-examples/npm-spreadsheet-chart/static/js/main.57313631.js",
+    "index.html": "/sproj-examples/npm-spreadsheet-chart/index.html",
+    "main.258e8f80.css.map": "/sproj-examples/npm-spreadsheet-chart/static/css/main.258e8f80.css.map",
+    "main.57313631.js.map": "/sproj-examples/npm-spreadsheet-chart/static/js/main.57313631.js.map"
   },
   "entrypoints": [
     "static/css/main.258e8f80.css",
