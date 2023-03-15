@@ -13,7 +13,7 @@ function App() {
     <main>
       <section>
         <h3 class="main-sec1-h3">Spread Sheet</h3>
-        <button type="button" class="main-sec2-col-button" onClick={() => window.open('https://iddan.github.io/react-spreadsheet/docs/')}>react-spead-sheet document</button>
+        <button type="button" class="main-sec2-col-button" onClick={() => window.open('https://iddan.github.io/react-spreadsheet')}>react-spead-sheet</button>
         <p class="main-sec-p main-purple-600 main-pt"><b>Installation</b></p>
         <p class="main-sec-p main-pb">$ npm install scheduler react-spreadsheet</p>
         <p class="main-sec-p main-purple-600"><b>Source Code</b></p>
@@ -22,7 +22,7 @@ function App() {
 
       <section>
       <h3 class="main-sec1-h3">Chart</h3>
-        <button type="button" class="main-sec2-col-button" onClick={() => window.open('https://recharts.org/en-US/guide/installation')}>recharts document</button>
+        <button type="button" class="main-sec2-col-button" onClick={() => window.open('https://recharts.org')}>recharts</button>
         <p class="main-sec-p main-purple-600 main-pt"><b>Installation</b></p>
         <p class="main-sec-p main-pb">$ npm install recharts</p>
         <p class="main-sec-p main-purple-600"><b>Source Code</b></p>
