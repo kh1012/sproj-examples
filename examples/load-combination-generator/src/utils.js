@@ -1,3 +1,10 @@
+export function isExistQueryStrings() {
+  const param = new URLSearchParams(window.location.search);
+  const mapiKey = param.get('mapiKey') || "";
+  const redirectUrl = param.get('redirectTo') || "";
+  return ( mapiKey !== "" && redirectUrl !== "" );
+}
+
 export const loadData = async (targetUrl) => {
     const param = new URLSearchParams(window.location.search);
     const mapiKey = param.get('mapiKey') || "";
