@@ -1,0 +1,127 @@
+form {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+input[type=text]{
+  color: #ffffff;
+  background-color: rgb(34, 44, 60);
+  border: 1px solid var(--border_color);
+  border-radius: 3px; 
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+input[type=text]:hover {
+  background-color: rgb(45, 53, 68);
+}
+
+input[type=text]:focus {
+  border: 1px solid var(--hover_border_color);
+}
+
+input[type=text]::placeholder {
+  color: rgb(117, 117, 117);
+  font-style: italic;
+}
+
+input[type=button] {
+  color: #ffffff;
+  box-sizing: border-box;
+  background-color: rgb(47, 59, 76);
+  border: 1px solid var(--border_color);
+  border-radius: 3px;
+  width: 100%;
+  height: 100%;
+}
+
+input[type=button]:hover {
+  border: 1px solid var(--hover_border_color);
+}
+
+input[type=button]:active {
+  background-color: rgb(11, 125, 182);
+}
+
+select {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: rgb(47, 59, 76);
+  border: 1px solid var(--border_color);
+  border-radius: 3px;
+  color: #ffffff;
+  text-align: center;
+}
+
+select:hover {
+  border: 1px solid var(--hover_border_color);
+}
+
+input[type=checkbox] {
+  box-sizing: border-box;
+  width: 80%;
+  height: 80%;
+  vertical-align: middle;
+  margin: auto;
+  text-align: center;
+}
+
+.toggleSwitch {
+  box-sizing: border-box;
+  position : relative ;
+  display : inline-block;
+  width : 0px;
+  height : 100%;
+  padding-left: 44px;
+  background-color: #242E3D;
+  border-radius: 30px;
+  border: 2px solid var(--border_color);
+  margin:auto;
+}
+
+.toggleSwitch .toggleButton {
+  content: '';
+  position: absolute;
+  width: 0px;
+  height: calc(100% - 2px);
+  padding-left: 22px;
+  border-radius: 50%;
+  background-color: white;
+  top: 1px;
+  left: 1px;
+  transition:  all 0.2s;
+}
+
+.toggleSwitch.active {
+  background-color: var(--hover_border_color);
+}
+
+.toggleSwitch.active .toggleButton {
+  left : 21px;
+}
+
+.toggleSwitch, .toggleButton {
+  transition:  all 0.2s;
+}
+
+.label_result {
+  color: #ffffff;
+  width: 100%;
+  padding-left: 4px;
+  font: -webkit-small-control;
+  line-height: 26px;
+}
+
+.label_input {
+  text-align: left !important;
+  width: calc(100% + 4px) !important;
+  margin-left: -4px;
+}
+
+.label_input::placeholder {
+  color: #911010 !important;
+}
