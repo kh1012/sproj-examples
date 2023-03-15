@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/sproj-examples/npm-spreadsheet-chart/static/css/main.258e8f80.css",
-    "main.js": "/sproj-examples/npm-spreadsheet-chart/static/js/main.57313631.js",
+    "main.js": "/sproj-examples/npm-spreadsheet-chart/static/js/main.cea957c8.js",
     "index.html": "/sproj-examples/npm-spreadsheet-chart/index.html",
     "main.258e8f80.css.map": "/sproj-examples/npm-spreadsheet-chart/static/css/main.258e8f80.css.map",
-    "main.57313631.js.map": "/sproj-examples/npm-spreadsheet-chart/static/js/main.57313631.js.map"
+    "main.cea957c8.js.map": "/sproj-examples/npm-spreadsheet-chart/static/js/main.cea957c8.js.map"
   },
   "entrypoints": [
     "static/css/main.258e8f80.css",
-    "static/js/main.57313631.js"
+    "static/js/main.cea957c8.js"
   ]
 }
