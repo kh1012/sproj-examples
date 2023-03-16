@@ -42,4 +42,11 @@ function RenderLineChart() {
       <Tooltip />
     </LineChart>
   );
-}`;
+}
+
+function App() {
+  ...
+  <RenderLineChart />
+  ...
+}
+`;

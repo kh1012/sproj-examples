@@ -21,7 +21,7 @@ function App() {
       </section>
 
       <section>
-      <h3 class="main-sec1-h3">Chart</h3>
+      <h3 class="main-sec1-h3 main-pt">Chart</h3>
         <button type="button" class="main-sec2-col-button" onClick={() => window.open('https://recharts.org')}>recharts</button>
         <p class="main-sec-p main-purple-600 main-pt"><b>Installation</b></p>
         <p class="main-sec-p main-pb">$ npm install recharts</p>
