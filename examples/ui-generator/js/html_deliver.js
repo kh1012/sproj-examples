@@ -1,10 +1,10 @@
-var layer_num=0;
-$(document).ready(function () {	
-  $("#add_layer").click(function () {    
+var layer_num = 0;
+$(document).ready(function () {
+  $("#add_layer").click(function () {
     layer_num++;
     $("#block_create").append(
       "<div id='layer" + layer_num + "' class='layer'><button class='layout_selector' onclick='itemClick(event);'></button></div>"
-      );
+    );
   });
 });
 
@@ -27,32 +27,41 @@ function block_add() {
   let block_wrap = document.getElementById("block_wrap")
   let block = block_wrap.childNodes;
 
-  while (block[1].hasChildNodes()) {
-    block[1].removeChild(block[1].firstChild);
+  while (block[3].hasChildNodes()) {
+    block[3].removeChild(block[3].firstChild);
   }
 
   $("#ui_result").append(
     html_body
-    );
-    
+  );
+
   block_num++;
 }
 
+var preview_active = 0;
 function preview() {
   let all_layer = document.getElementsByClassName("layer");
   let all_layout_div = document.getElementsByClassName("layout_div");
 
   for (i = 0; i < all_layer.length; i++) {
-      if (all_layer[i].style.backgroundColor != 'rgb(47, 59, 76)')
-          all_layer[i].style.backgroundColor = 'rgb(47, 59, 76)';
-      else
-          all_layer[i].style.backgroundColor = 'transparent';
+    if (preview_active == 0) {
+      all_layer[i].style.backgroundColor = 'rgb(47, 59, 76)';
+    }
+    else {
+      all_layer[i].style.backgroundColor = 'transparent';
+    }
   }
 
   for (i = 0; i < all_layout_div.length; i++) {
-      if (all_layout_div[i].style.backgroundColor != 'rgb(72, 82, 95)')
-          all_layout_div[i].style.backgroundColor = 'rgb(72, 82, 95)';
-      else
-          all_layout_div[i].style.backgroundColor = 'transparent';
+    if (preview_active == 0) {
+      all_layout_div[i].style.backgroundColor = 'rgb(72, 82, 95)';
+    }
+    else {
+      all_layout_div[i].style.backgroundColor = 'transparent';
+    }
   }
+  if (preview_active == 0)
+    preview_active = 1;
+  else
+    preview_active = 0;
 }
