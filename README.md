@@ -1,5 +1,5 @@
 # :zap: Midas API Plugin Examples
-MIDAS API Plugin 예제들을 기록하는 저장소 입니다.
+This repository stores MIDAS API Plugin examples.
 <br /><br />
 
 ## Example Demos
