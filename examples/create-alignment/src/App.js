@@ -182,7 +182,6 @@ function App() {
 
 	const getKeyAuthResult = async (key) => {
 		const Url = baseURL + "/mapikey/verify";
-		console.log(Url);
 		const response = await fetch(Url,{
 			method: "GET",
 			headers: {
@@ -193,7 +192,6 @@ function App() {
 
 		if(response.ok){
 			const resultAsJson = await response.json();
-			console.log(resultAsJson);
 			return resultAsJson["keyVerified"];
 		}
 		else{
