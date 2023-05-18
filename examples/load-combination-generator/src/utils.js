@@ -5,16 +5,63 @@ export function isExistQueryStrings() {
   return ( mapiKey !== "" );
 }
 
+const getKeyAuthResult = async (baseUrl ,key) => {
+  const Url = baseUrl + "/mapikey/verify";
+  const response = await fetch(Url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "MAPI-Key": key,
+    },
+  });
+
+  if(response.ok){
+    const resultAsJson = await response.json();
+    return resultAsJson["keyVerified"];
+  }
+  else{
+    return false;
+  }
+}
+
 export const loadData = async (targetUrl) => {
     const param = new URLSearchParams(window.location.search);
     const mapiKey = param.get('mapiKey') || "";
     const redirectUrl = param.get('redirectTo') || window.location.origin;
+    const isValidKey = getKeyAuthResult(redirectUrl, mapiKey);
+    if( isValidKey ) {
+      let opts = {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          "MAPI-Key": mapiKey,
+        },
+      };
+  
+      try {
+        const res = await fetch(redirectUrl + targetUrl, opts);
+        const json = await res.json();
+        return json;
+      } catch (_) {
+        return "";
+      }
+    } else {
+      return "mapiKey is not verified."
+    }
+};
 
+export const sendData = async (targetUrl, body, method = "PUT") => {
+  const param = new URLSearchParams(window.location.search);
+  const mapiKey = param.get('mapiKey') || "";
+  const redirectUrl = param.get('redirectTo') || window.location.origin;
+  const isValidKey = getKeyAuthResult(redirectUrl, mapiKey);
+  if( isValidKey ) {
     let opts = {
+      method: method,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         "MAPI-Key": mapiKey,
       },
+      body: body,
     };
 
     try {
@@ -24,28 +71,8 @@ export const loadData = async (targetUrl) => {
     } catch (_) {
       return "";
     }
-};
-
-export const sendData = async (targetUrl, body, method = "PUT") => {
-  const param = new URLSearchParams(window.location.search);
-  const mapiKey = param.get('mapiKey') || "";
-  const redirectUrl = param.get('redirectTo') || window.location.origin;
-
-  let opts = {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8',
-      "MAPI-Key": mapiKey,
-    },
-    body: body,
-  };
-
-  try {
-    const res = await fetch(redirectUrl + targetUrl, opts);
-    const json = await res.json();
-    return json;
-  } catch (_) {
-    return "";
+  } else {
+    return "mapiKey is not verified."
   }
 };
 
