@@ -2,13 +2,13 @@ export function isExistQueryStrings() {
   const param = new URLSearchParams(window.location.search);
   const mapiKey = param.get('mapiKey') || "";
   const redirectUrl = param.get('redirectTo') || "";
-  return ( mapiKey !== "" && redirectUrl !== "" );
+  return ( mapiKey !== "" );
 }
 
 export const loadData = async (targetUrl) => {
     const param = new URLSearchParams(window.location.search);
     const mapiKey = param.get('mapiKey') || "";
-    const redirectUrl = param.get('redirectTo') || "http://localhost:80/gen";
+    const redirectUrl = param.get('redirectTo') || window.location.origin;
 
     let opts = {
       headers: {
@@ -29,7 +29,7 @@ export const loadData = async (targetUrl) => {
 export const sendData = async (targetUrl, body, method = "PUT") => {
   const param = new URLSearchParams(window.location.search);
   const mapiKey = param.get('mapiKey') || "";
-  const redirectUrl = param.get('redirectTo') || "http://localhost:80/gen";
+  const redirectUrl = param.get('redirectTo') || window.location.origin;
 
   let opts = {
     method: method,
