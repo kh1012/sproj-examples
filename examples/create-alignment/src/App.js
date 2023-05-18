@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useLocation } from "react-router-dom";
 import './App.css';
 //MUI-Material
 import InputLabel from '@mui/material/InputLabel';
@@ -19,7 +20,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { red } from '@mui/material/colors';
 //MUR-DataGird
 import { DataGrid } from '@mui/x-data-grid';
 import { randomInt } from '@mui/x-data-grid-generator';
@@ -108,7 +108,6 @@ const createSegmtRow = () => {
 }
 
 function App() {
-
 	//Modal for Error
 	const [open, setOpen] = React.useState(false);
 	const handleOpen = () => setOpen(true);
@@ -117,18 +116,19 @@ function App() {
 	//Tap Setting
 	const [value, setValue] = React.useState(0);
 
+  const location = useLocation();
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
 
 	//Value for Design
-	const [baseURL, setBaseURL] = React.useState("10");
+	const [baseURL, setBaseURL] = React.useState("");
 	const [mapiKey, setMapiKey] = React.useState("");
-	const [snodeValue, setSnodeValue] = React.useState("1001");
-	const [selemValue, setSelemValue] = React.useState("1001");
+	const [snodeValue, setSnodeValue] = React.useState(1001);
+	const [selemValue, setSelemValue] = React.useState(1001);
 
 	//Alignment Data Grid
-	const [alignRows, setAlignRows] = React.useState("")
+	const [alignRows, setAlignRows] = React.useState([])
 	function addAlignRow() {
 		setAlignRows((prevRows) => [...prevRows, createAlignRow()]);
 	}
@@ -179,6 +179,50 @@ function App() {
 		]
 	}]);
 
+
+	const getKeyAuthResult = async (key) => {
+		const Url = baseURL + "/mapikey/verify";
+		console.log(Url);
+		const response = await fetch(Url,{
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"MAPI-Key": key,
+			},
+		});
+
+		if(response.ok){
+			const resultAsJson = await response.json();
+			console.log(resultAsJson);
+			return resultAsJson["keyVerified"];
+		}
+		else{
+			return false;
+		}
+	}
+
+	const urlParamHandler = async (param) => {
+    const urlParams = new URLSearchParams(param);
+    const mapiKey = urlParams.get("mapiKey")
+		console.log(mapiKey);
+		const verifyResult = await getKeyAuthResult(mapiKey);
+		console.log(verifyResult);
+		if (verifyResult) {
+			setMapiKey(mapiKey);
+		}
+  }
+	async function setBasicInfo() {
+		setBaseURL(window.location.origin);
+	}
+
+	React.useEffect(() => {
+		setBasicInfo();
+	}, [])
+
+	React.useEffect(() => {
+		urlParamHandler(location.search);
+	}, [baseURL])
+
 	React.useEffect(()=> {
 		setChartData(() => {
 			let DataSet = DataBuilding();
@@ -189,7 +233,7 @@ function App() {
 						{x:0,y:0}
 					]
 				}]
-				console.log(XYvalue);
+				// console.log(XYvalue);
 				return XYvalue
 			} else {
 				let XYSet = CalculationXY(...DataSet)
@@ -206,18 +250,10 @@ function App() {
 				return XYvalue
 			}
 		})
-	},[alignRows,segmtRows])
+	},[baseURL, mapiKey, alignRows,segmtRows])
 
 	//API Actions
 	function DataBuilding() {
-		let M_URI
-		if (baseURL === "10") {
-			M_URI = "http://localhost:10024";
-		} else {
-			M_URI = "https://api-beta.rpm.kr-dv-midasit.com/civil";
-		}
-		console.log(M_URI);
-		const M_KEY = mapiKey;
 		const M_NODE = Number(snodeValue);
 		const M_ELEM = Number(selemValue);
 		const AlignData = cloneDeep(alignRows);
@@ -273,8 +309,11 @@ function App() {
 		if (M_LINE.length === 0 || M_SEGM.length === 0) {
 			valueError = false;	
 		}
-		if (valueError === true) {
-			return [M_URI, M_KEY, M_NODE, M_ELEM, M_LINE, M_SEGM];
+		
+		console.log(baseURL);
+		console.log(mapiKey);
+		if (valueError === true && baseURL !== "" && mapiKey !== "") {
+			return [baseURL, mapiKey, M_NODE, M_ELEM, M_LINE, M_SEGM];
 		} else {
 			return valueError
 		}
@@ -298,7 +337,7 @@ function App() {
 					<Box sx={{ flexGrow: 1 }}>
 						<Grid container spacing={0.2}>
 							{/*Select Base URL*/}
-							<Grid xs={6}>
+							{/* <Grid xs={6}>
 								<Item>
 									<Tooltip title="Select URI to Send data to Civil">
 										<FormControl sx={{ m: 1, width: '95%' }} size="small">
@@ -316,9 +355,9 @@ function App() {
 										</FormControl>
 									</Tooltip>
 								</Item>
-							</Grid>
+							</Grid> */}
 							{/*MAPI-Key*/}
-							<Grid xs={6}>
+							{/* <Grid xs={6}>
 								<Item>
 									<Box
 										component="form"
@@ -342,7 +381,7 @@ function App() {
 										/>
 									</Box>
 								</Item>
-							</Grid>
+							</Grid> */}
 							{/*Node_Number*/}
 							<Grid xs={6}>
 								<Item>
@@ -360,7 +399,6 @@ function App() {
 											variant="standard"
 											size="small"
 											type="number"
-											defaultValue={snodeValue}
 											value={snodeValue}
 											onChange={(event) => { setSnodeValue(event.target.value) }}
 											InputProps={{
@@ -389,7 +427,6 @@ function App() {
 											variant="standard"
 											size="small"
 											type="number"
-											defaultValue={selemValue}
 											value={selemValue}
 											onChange={(event) => { setSelemValue(event.target.value) }}
 											InputProps={{
@@ -427,8 +464,8 @@ function App() {
 											<DataGrid
 												columns={AlignColumns}
 												rows={alignRows}
-												disableColumnMenu='true'
-												hideFooter='true'
+												disableColumnMenu={true}
+												hideFooter={true}
 												density="compact"
 												onCellEditCommit={onCellEditCommitAlign}
 											/>
