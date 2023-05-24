@@ -12,7 +12,7 @@ export const DataLoader = async () => {
     for (const value in dbData) {
         const targetData = dbData[value];
         if (targetData.TYPE !== "CS")
-            registeredNames.push(targetData.NAME + "(" + targetData.TYPE + ")");
+            registeredNames.push(targetData.NAME);
     };
 
     return registeredNames;
