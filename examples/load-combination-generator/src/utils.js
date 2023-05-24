@@ -38,7 +38,7 @@ export const loadData = async (targetUrl) => {
       };
   
       try {
-        const res = await fetch(redirectUrl + targetUrl, opts);
+        const res = await fetch(redirectUrl + "/civil" + targetUrl, opts);
         const json = await res.json();
         return json;
       } catch (_) {
@@ -65,7 +65,7 @@ export const sendData = async (targetUrl, body, method = "PUT") => {
     };
 
     try {
-      const res = await fetch(redirectUrl + targetUrl, opts);
+      const res = await fetch(redirectUrl  + "/civil" + targetUrl, opts);
       const json = await res.json();
       return json;
     } catch (_) {

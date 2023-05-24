@@ -1,6 +1,6 @@
 export default CalculationXY;
 
-function CalculationXY(URI, KEY, NODE, ELEM, LINE, SEGM) {
+function CalculationXY(URI, KEY, PROGRAM, NODE, ELEM, LINE, SEGM) {
     let JsonInput = {
         NODE_NB: NODE,
         ELEM_NB: ELEM,

@@ -1,6 +1,6 @@
 export default MainSubModule;
 
-function MainSubModule(URI, KEY, NODE, ELEM, LINE, SEGM) {
+function MainSubModule(URI, KEY, PROGRAM, NODE, ELEM, LINE, SEGM) {
     let JsonInput = {
         NODE_NB: NODE,
         ELEM_NB: ELEM,
@@ -8,7 +8,8 @@ function MainSubModule(URI, KEY, NODE, ELEM, LINE, SEGM) {
         SEG_INFO: SEGM
     };
     console.log(JsonInput)
-    let NodeCoor = CreateLayout(URI, KEY, JsonInput);
+    const serverUri = URI + "/" + PROGRAM;
+    let NodeCoor = CreateLayout(serverUri, KEY, JsonInput);
     return NodeCoor
 }
 
@@ -268,12 +269,13 @@ async function CreateNode(baseUrl, Mapi_Key, Node_Start, Xi, Yi) {
             Y: Yi[i]
         };
     }
+    console.log(dbNODE);
     //Web Request for Nodes
     const res = await fetch(baseUrl + "/db/node", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "MAPI-Jey": Mapi_Key
+            "MAPI-Key": Mapi_Key
         },
         body: JSON.stringify(dbNODE)
     });
@@ -304,7 +306,7 @@ async function CreateElem(
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "MAPI-Jey": Mapi_Key
+            "MAPI-Key": Mapi_Key
         },
         body: JSON.stringify(dbELEM)
     });
@@ -328,7 +330,7 @@ async function CreateSkew(baseUrl, Mapi_Key, Node_Start, Ti) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "MAPI-Jey": Mapi_Key
+            "MAPI-Key": Mapi_Key
         },
         body: JSON.stringify(dbSKEW)
     });
@@ -386,7 +388,7 @@ async function CreateGrup(
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "MAPI-Jey": Mapi_Key
+            "MAPI-Key": Mapi_Key
         },
         body: JSON.stringify(dbGRUP)
     });

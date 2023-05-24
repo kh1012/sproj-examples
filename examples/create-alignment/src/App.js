@@ -124,6 +124,7 @@ function App() {
 	//Value for Design
 	const [baseURL, setBaseURL] = React.useState("");
 	const [mapiKey, setMapiKey] = React.useState("");
+	const [programName, setProgramName] = React.useState("");
 	const [snodeValue, setSnodeValue] = React.useState(1001);
 	const [selemValue, setSelemValue] = React.useState(1001);
 
@@ -150,7 +151,7 @@ function App() {
 	};
 
 	//Segment Data Grid
-	const [segmtRows, setSegmtRows] = React.useState("")
+	const [segmtRows, setSegmtRows] = React.useState([])
 	function addSegmtRow() {
 		setSegmtRows((prevRows) => [...prevRows, createSegmtRow()]);
 	}
@@ -192,6 +193,7 @@ function App() {
 
 		if(response.ok){
 			const resultAsJson = await response.json();
+			setProgramName(resultAsJson["program"]);
 			return resultAsJson["keyVerified"];
 		}
 		else{
@@ -248,7 +250,7 @@ function App() {
 				return XYvalue
 			}
 		})
-	},[baseURL, mapiKey, alignRows,segmtRows])
+	},[baseURL, mapiKey, programName, alignRows, segmtRows])
 
 	//API Actions
 	function DataBuilding() {
@@ -311,7 +313,7 @@ function App() {
 		console.log(baseURL);
 		console.log(mapiKey);
 		if (valueError === true && baseURL !== "" && mapiKey !== "") {
-			return [baseURL, mapiKey, M_NODE, M_ELEM, M_LINE, M_SEGM];
+			return [baseURL, mapiKey, programName, M_NODE, M_ELEM, M_LINE, M_SEGM];
 		} else {
 			return valueError
 		}
@@ -485,8 +487,8 @@ function App() {
 												<DataGrid
 													columns={SegmtColumns}
 													rows={segmtRows}
-													disableColumnMenu='true'
-													hideFooter='true'
+													disableColumnMenu={true}
+													hideFooter={true}
 													density="compact"
 													onCellEditCommit={onCellEditCommitSegmt}
 												/>
