@@ -224,7 +224,6 @@ function Main() {
     let userLcomListItem = {
       "key" : String(combNumber),
       "NAME" : combName,
-      "KIND" : "GEN",
       "ACTIVE" : combActive,
       "iTYPE" : combType,
     };
@@ -268,7 +267,7 @@ function Main() {
       }
 
       const bodyString = JSON.stringify(dataObject);
-      const targetUrl = "/db/LCOM";
+      const targetUrl = "/db/LCOM-GEN";
       await sendData(targetUrl, bodyString, "PUT");
     };
 
@@ -310,11 +309,6 @@ function Main() {
       valueOptions: activeValueOptions,
       editable: false,
       sortable: false,
-    },
-    {
-      field: 'KIND',
-      headerName: 'kind',
-      editable: false,
     },
     {
       field: 'TYPE',
@@ -427,8 +421,10 @@ function Main() {
                   }}
                 />
               </Scrollbars>
-              <mui.Button onClick={handleReflectDataIntoCivil}>Send data to civil</mui.Button>
-              <mui.Button onClick={handleRefreshData}>Refresh All Data</mui.Button>
+              <div style={{display: "flex", justifyContent: "center"}}>
+                <mui.Button onClick={handleReflectDataIntoCivil}>Send data to civil</mui.Button>
+                <mui.Button onClick={handleRefreshData}>Refresh All Data</mui.Button>
+              </div>
             </mui.Box>
             <mui.Box width="40%">
               <mui.Grid container sx={{p: 1, width: '100%'}}>
@@ -490,8 +486,10 @@ function Main() {
                   }}
                   />
               </Scrollbars>
-              <mui.Button onClick={handleNew}>New</mui.Button>
-              <mui.Button onClick={handleRegisterLcom}>Registration</mui.Button>
+              <div style={{display: "flex", justifyContent: "center"}}>
+                <mui.Button onClick={handleNew}>New</mui.Button>
+                <mui.Button onClick={handleRegisterLcom}>Registration</mui.Button>
+              </div>
             </mui.Box>
           </mui.Stack>
         </mui.Box>

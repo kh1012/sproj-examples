@@ -19,7 +19,6 @@ const outerWidth = (baseWidth + 5) + "rem";
 ListComponent.defaultProps = {
     checkList: [],
     loader: () => {},
-    fullWidth: false,
     userData: {user: []},
 };
 
@@ -32,7 +31,7 @@ const ColoredContainer = (props) => (
         display="flex"
         justifyContent="center"
         alignItems="center"
-        sx={{height: props.fullWidth ? '100%' : props.innerWidth, backgroundColor: "#F5F4FF"}}>
+        sx={{height: '100%', backgroundColor: "#F5F4FF"}}>
         {props.children}
     </Box>
 );
@@ -46,7 +45,7 @@ const awaiter = async (setPending, setListData, func, userData) => {
 };
 
 export function ListComponent(props) {
-    const {checkList, setCheckList, doUpdate, setDoUpdate, Loader, label, fullWidth, userData} = props;
+    const {checkList, setCheckList, doUpdate, setDoUpdate, Loader, label, userData} = props;
     const [listData, setListData] = React.useState([]);
     const [isPending, setPending] = React.useState(false);
 
@@ -81,7 +80,7 @@ export function ListComponent(props) {
     const handleOnClick = () => { updateCheckState(setCheckList, isFullyChecked ? [] : listData) };
 
     return (
-        <Box sx={{border: '1px solid #edf0f2', width: fullWidth ? '100%' : outerWidth}}>
+        <Box sx={{border: '1px solid #edf0f2', width: '100%'}}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" height="3rem">
                 <ListItem
                     key={label}
@@ -93,43 +92,45 @@ export function ListComponent(props) {
                     }
                 >
                     <ListItemButton onClick={handleOnClick}>
-                        <ListItemText primary={label} />
+                        <ListItemText primary={label} primaryTypographyProps={{sx:{textAlign: "center"}}} />
                     </ListItemButton>
                 </ListItem>
             </Stack>
-            {isPending && (
-                <ColoredContainer fullWidth={fullWidth}>
-                    <CircularProgress />
-                </ColoredContainer>
-            )}
-            {!isPending && !isEmpty(listData) && (
-                <ColoredContainer fullWidth={fullWidth}>
-                    <Typography>No Items.</Typography>
-                </ColoredContainer>
-            )}
-            {!isPending && isEmpty(listData) && (
-                <Scrollbars autoHeight autoHeightMax={innerWidth} autoHeightMin={innerWidth}>
-                    <List sx={{height: innerWidth}}>
-                        {
-                            listData.map((value) => (
-                                <ListItem
-                                    key={value}
-                                    disableGutters
-                                    disablePadding
-                                    dense
-                                    secondaryAction={
-                                        <Checkbox checked={isExistInCheckList(value)} onClick={() => changeCheckedList(value)} />
-                                    }
-                                    >
-                                    <ListItemButton onClick={() => changeCheckedList(value)}>
-                                        <ListItemText primary={value} />
-                                    </ListItemButton>
-                                </ListItem>
-                            ))
-                        }
-                    </List>
-                </Scrollbars>
-             ) }
+            <div style={{height: innerWidth}}>
+                {isPending && (
+                    <ColoredContainer>
+                        <CircularProgress />
+                    </ColoredContainer>
+                )}
+                {!isPending && !isEmpty(listData) && (
+                    <ColoredContainer>
+                        <Typography>No Items.</Typography>
+                    </ColoredContainer>
+                )}
+                {!isPending && isEmpty(listData) && (
+                    <Scrollbars autoHeight autoHeightMax={innerWidth} autoHeightMin={innerWidth}>
+                        <List sx={{height: innerWidth}}>
+                            {
+                                listData.map((value) => (
+                                    <ListItem
+                                        key={value}
+                                        disableGutters
+                                        disablePadding
+                                        dense
+                                        secondaryAction={
+                                            <Checkbox checked={isExistInCheckList(value)} onClick={() => changeCheckedList(value)} />
+                                        }
+                                        >
+                                        <ListItemButton onClick={() => changeCheckedList(value)}>
+                                            <ListItemText primary={value} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                ))
+                            }
+                        </List>
+                    </Scrollbars>
+                ) }
+            </div>
         </Box>
     );
 }
