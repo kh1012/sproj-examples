@@ -1,3 +1,3 @@
-# react library test
+# Create Alignment
 
-스프레드시트, 차트 라이브러리에 대한 소개 입니다.
+입력한 값으로 선을 그릴 수 있습니다.
