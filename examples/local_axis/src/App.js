@@ -86,25 +86,27 @@ function App() {
   //Show the Chart by Spline
   React.useEffect(()=>{
     try {
-      let div = 10;
-      if (radioOp==="MCS") {
-        setSplineAngle(Spline.MonotoneCubicSpline(nodeVertix[1],nodeVertix[2],div));
-      } else if (radioOp==="NCS"){
-        setSplineAngle(Spline.NaturalCubicSpline(nodeVertix[1],nodeVertix[2],div));
-      } else if (radioOp==="CCS") {
-        setSplineAngle(Spline.ClampedCubicSpline(nodeVertix[1],nodeVertix[2],div,startPt,endPt));
-      }
-      let dviSplineChart = new Array(splineAngle.length);
-      for (let i = 0; i < splineAngle.length; i++) {
-        dviSplineChart[i] = {
-          "x":splineAngle[i][0],
-          "y":splineAngle[i][1],
-        }
-      }
-      setChartSplineData([{
-        "id":"Line",
-        "data":dviSplineChart
-      }])
+			if (nodeVertix !== undefined) {
+				let div = 10;
+				if (radioOp==="MCS") {
+					setSplineAngle(Spline.MonotoneCubicSpline(nodeVertix[1],nodeVertix[2],div));
+				} else if (radioOp==="NCS"){
+					setSplineAngle(Spline.NaturalCubicSpline(nodeVertix[1],nodeVertix[2],div));
+				} else if (radioOp==="CCS") {
+					setSplineAngle(Spline.ClampedCubicSpline(nodeVertix[1],nodeVertix[2],div,startPt,endPt));
+				}
+				let dviSplineChart = new Array(splineAngle.length);
+				for (let i = 0; i < splineAngle.length; i++) {
+					dviSplineChart[i] = {
+						"x":splineAngle[i][0],
+						"y":splineAngle[i][1],
+					}
+				}
+				setChartSplineData([{
+					"id":"Line",
+					"data":dviSplineChart
+				}])
+			}
     } catch (error) {
       console.log(error);
     }
@@ -112,28 +114,32 @@ function App() {
 
   async function LocalAxis() {
     try {
+			if (nodeVertix === undefined) {
+				alert("nodeVertix is undefined");
+				return;
+			}
 
-      let LocalAxisResult;
-      let div = 1;
-      if (radioOp==="MCS") {
-        LocalAxisResult = Spline.MonotoneCubicSpline(nodeVertix[1],nodeVertix[2],div); 
-      } else if (radioOp==="NCS"){
-        LocalAxisResult = Spline.NaturalCubicSpline(nodeVertix[1],nodeVertix[2],div);
-      } else if (radioOp==="CCS") {
-        LocalAxisResult = Spline.ClampedCubicSpline(nodeVertix[1],nodeVertix[2],div,startPt,endPt);
-      }
-      let jsonbody = {};
-      for (let i = 0 ; i < LocalAxisResult.length; i++) {
-        jsonbody[nodeVertix[0][i]] = {
-          "iMETHOD" : 1,
-          "ANGLE_X" : 0,
-          "ANGLE_Y" : 0,
-          "ANGLE_Z" : Math.atan(LocalAxisResult[i][2])*(180/Math.PI)
-        }
-      }
-      jsonbody = {"Assign":jsonbody}
-      const resSkew = await Common.midasAPI("PUT","/db/skew",jsonbody);
-      console.log(resSkew);
+			let LocalAxisResult;
+			let div = 1;
+			if (radioOp==="MCS") {
+				LocalAxisResult = Spline.MonotoneCubicSpline(nodeVertix[1],nodeVertix[2],div); 
+			} else if (radioOp==="NCS"){
+				LocalAxisResult = Spline.NaturalCubicSpline(nodeVertix[1],nodeVertix[2],div);
+			} else if (radioOp==="CCS") {
+				LocalAxisResult = Spline.ClampedCubicSpline(nodeVertix[1],nodeVertix[2],div,startPt,endPt);
+			}
+			let jsonbody = {};
+			for (let i = 0 ; i < LocalAxisResult.length; i++) {
+				jsonbody[nodeVertix[0][i]] = {
+					"iMETHOD" : 1,
+					"ANGLE_X" : 0,
+					"ANGLE_Y" : 0,
+					"ANGLE_Z" : Math.atan(LocalAxisResult[i][2])*(180/Math.PI)
+				}
+			}
+			jsonbody = {"Assign":jsonbody}
+			const resSkew = await Common.midasAPI("PUT","/db/skew",jsonbody);
+			console.log(resSkew);
     } catch (error) {
       console.log(error);
     }
@@ -151,44 +157,44 @@ function App() {
   },[radioOp]);
 
   return (
-    <div className="App">
-      <div className = "MainApp">
-        <Box sx={{ flexGrow: 1 }}>
-        <h4 className="titleStyle">Cubic Spline</h4>
-          <Grid container spacing={1} paddingBottom={1}>
-            <Grid xs={8}>
-              <Item sx={{height:180}}>
-                {RadioButtonsGroup(radioOp,setRadioOp)}
-              <Stack spacing={2} direction="row" justifyContent="right" alignItems="center">
-                {TextFieldInput("Start Point", startPt, setStartPt, disText)}
-                {TextFieldInput("End Point", endPt, setEndPt, disText)}
-              </Stack>
-              </Item>
-            </Grid>
-            <Grid xs={4}>
-              <Item sx={{height:180}}> <Stack spacing={1} direction="column" alignItems="center">
-                  {Buttons.SubButton("contained", "spline?", HmodalOpen)}
-                  {Buttons.MainButton("contained", "Import Node", ModalOpen)}
-                  {Buttons.MainButton("contained", "Apply Local Axis", LocalAxis)}
-              </Stack> </Item>
-            </Grid>
-          </Grid>
-        <h4 className="titleStyle">Preview</h4>
-          <Grid container spacing={1} paddingBottom={1}>
-            <Grid xs={12}>
-              <Item sx={{height:350, padding:0}}>
-                <div className='userWrap'>
-                  <div className='chartStyle'>{Charts.ChartScatter(chartNodeData, chartScale)}</div>
-                  <div className='chartStyle'>{Charts.ChartLine(chartSplineData, chartScale)}</div>
-                </div>
-              </Item>
-            </Grid>
-          </Grid>
-          {Modals.NodeImport(openModal, ModalClose, setNode, showNode)}
-          {Modals.HelpModal(HopenModal, HmodalClose)}
-        </Box>
-      </div>
-    </div>
+		<div className="App">
+		<div className = "MainApp">
+			<Box sx={{ flexGrow: 1 }}>
+			<h4 className="titleStyle">Cubic Spline</h4>
+				<Grid container spacing={1} paddingBottom={1}>
+					<Grid xs={8}>
+						<Item sx={{height:180}}>
+							{RadioButtonsGroup(radioOp,setRadioOp)}
+						<Stack spacing={2} direction="row" justifyContent="right" alignItems="center">
+							{TextFieldInput("Start Point", startPt, setStartPt, disText)}
+							{TextFieldInput("End Point", endPt, setEndPt, disText)}
+						</Stack>
+						</Item>
+					</Grid>
+					<Grid xs={4}>
+						<Item sx={{height:180}}> <Stack spacing={1} direction="column" alignItems="center">
+								{Buttons.SubButton("contained", "spline?", HmodalOpen)}
+								{Buttons.MainButton("contained", "Import Node", ModalOpen)}
+								{Buttons.MainButton("contained", "Apply Local Axis", LocalAxis)}
+						</Stack> </Item>
+					</Grid>
+				</Grid>
+			<h4 className="titleStyle">Preview</h4>
+				<Grid container spacing={1} paddingBottom={1}>
+					<Grid xs={12}>
+						<Item sx={{height:350, padding:0}}>
+							<div className='userWrap'>
+								<div className='chartStyle'>{Charts.ChartScatter(chartNodeData, chartScale)}</div>
+								<div className='chartStyle'>{Charts.ChartLine(chartSplineData, chartScale)}</div>
+							</div>
+						</Item>
+					</Grid>
+				</Grid>
+				{Modals.NodeImport(openModal, ModalClose, setNode, showNode)}
+				{Modals.HelpModal(HopenModal, HmodalClose)}
+			</Box>
+		</div>
+	</div>
   );
 }
 
