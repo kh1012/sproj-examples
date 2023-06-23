@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/sproj-examples/examples/npm-spreadsheet-chart/static/css/main.258e8f80.css",
+    "main.js": "/sproj-examples/examples/npm-spreadsheet-chart/static/js/main.f98fba02.js",
+    "index.html": "/sproj-examples/examples/npm-spreadsheet-chart/index.html",
+    "main.258e8f80.css.map": "/sproj-examples/examples/npm-spreadsheet-chart/static/css/main.258e8f80.css.map",
+    "main.f98fba02.js.map": "/sproj-examples/examples/npm-spreadsheet-chart/static/js/main.f98fba02.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.258e8f80.css",
+    "static/js/main.f98fba02.js"
+  ]
+}

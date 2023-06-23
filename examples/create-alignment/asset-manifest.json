@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/sproj-examples/examples/create-alignment/static/css/main.5a05798b.css",
+    "main.js": "/sproj-examples/examples/create-alignment/static/js/main.0cdcd943.js",
+    "static/js/787.a6a5902d.chunk.js": "/sproj-examples/examples/create-alignment/static/js/787.a6a5902d.chunk.js",
+    "index.html": "/sproj-examples/examples/create-alignment/index.html",
+    "main.5a05798b.css.map": "/sproj-examples/examples/create-alignment/static/css/main.5a05798b.css.map",
+    "main.0cdcd943.js.map": "/sproj-examples/examples/create-alignment/static/js/main.0cdcd943.js.map",
+    "787.a6a5902d.chunk.js.map": "/sproj-examples/examples/create-alignment/static/js/787.a6a5902d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5a05798b.css",
+    "static/js/main.0cdcd943.js"
+  ]
+}
