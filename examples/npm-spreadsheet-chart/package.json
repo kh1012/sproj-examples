@@ -2,7 +2,7 @@
   "name": "npm-spreadsheet-graph",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://kh1012.github.io/sproj-examples/npm-spreadsheet-chart",
+  "homepage": "https://kh1012.github.io/sproj-examples/examples/npm-spreadsheet-chart",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

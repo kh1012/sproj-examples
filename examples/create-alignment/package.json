@@ -1,6 +1,6 @@
 {
   "main": "public/Main.js",
-  "homepage": "https://kh1012.github.io/sproj-examples/create-alignment",
+  "homepage": "https://kh1012.github.io/sproj-examples/examples/create-alignment",
   "name": "custom-ui",
   "version": "0.1.0",
   "private": true,

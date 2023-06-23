@@ -129,10 +129,9 @@ function chartScale(NodeVertix) {
 }
 
 async function midasAPI(method, subURL, body) {
-  // const baseURL = "https://api-beta.midasit.com:443/civil"
+  const baseURL = "https://api-beta.midasit.com:443/civil";
   // const Mapi_Key = "eyJ1ciI6InlqdzA2MDgiLCJwZyI6ImNpdmlsIiwiY24iOiJ2SEN0QWlHNFRnIn0.807c92b9b5b80e7537f1694b3d6d9ea01582e71c658b462d7236d6a8192739eb"
 	const searchParams = new URLSearchParams(window.location.search);
-	const baseURL = window.location.origin;
 	const Mapi_Key = searchParams.get("mapiKey") || "";
 	if (Mapi_Key === "") console.error("mapiKey가 존재하지 않습니다.");
 
