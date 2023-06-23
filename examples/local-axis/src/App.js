@@ -160,7 +160,6 @@ function App() {
 
   return (
 		<div className="App">
-			<FolderDropzone />
 		<div className = "MainApp">
 			<Box sx={{ flexGrow: 1 }}>
 			<h4 className="titleStyle">Cubic Spline</h4>

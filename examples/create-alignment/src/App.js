@@ -36,7 +36,7 @@ import { cloneDeep } from "lodash"
 import MainSubModule from './CreateLayout';
 import CalculationXY from './CalculationXY';
 
-//À±Àç¿õÀÔ´Ï´Ù
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½
 
 //Tab Setting
 function TabPanel(props) {
@@ -337,7 +337,7 @@ function App() {
 					<Box sx={{ flexGrow: 1 }}>
 						<Grid container spacing={0.2}>
 							{/*Select Base URL*/}
-							{/* <Grid xs={6}>
+							<Grid xs={6}>
 								<Item>
 									<Tooltip title="Select URI to Send data to Civil">
 										<FormControl sx={{ m: 1, width: '95%' }} size="small">
@@ -355,9 +355,9 @@ function App() {
 										</FormControl>
 									</Tooltip>
 								</Item>
-							</Grid> */}
+							</Grid>
 							{/*MAPI-Key*/}
-							{/* <Grid xs={6}>
+							<Grid xs={6}>
 								<Item>
 									<Box
 										component="form"
@@ -381,7 +381,7 @@ function App() {
 										/>
 									</Box>
 								</Item>
-							</Grid> */}
+							</Grid>
 							{/*Node_Number*/}
 							<Grid xs={6}>
 								<Item>
