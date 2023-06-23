@@ -7,4 +7,4 @@ This repository stores MIDAS API Plugin examples.
 - [Load Combination Generator Demo](https://kh1012.github.io/sproj-examples/examples/lcom-generator)
 - [UI Generator Demo](https://kh1012.github.io/sproj-examples/examples/ui-generator)
 - [NPM SpreadSheet and Chart Demo](https://kh1012.github.io/sproj-examples/examples/npm-spreadsheet-chart)
-- [Local Axis](https://kh1012.github.io/sproj-examples/examples/local-axis)
+- [Local Axis Demo](https://kh1012.github.io/sproj-examples/examples/local-axis)
