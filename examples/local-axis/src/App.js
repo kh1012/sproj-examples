@@ -15,8 +15,6 @@ import * as Modals from './Components/Modal'
 import * as Common from './Function/Common';
 import * as Spline from './Function/Logic';
 
-import FolderDropzone from "./Components/Dropzone";
-
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -160,7 +158,7 @@ function App() {
 
   return (
 		<div className="App">
-		<div className = "MainApp">
+			<div className = "MainApp">
 			<Box sx={{ flexGrow: 1 }}>
 			<h4 className="titleStyle">Cubic Spline</h4>
 				<Grid container spacing={1} paddingBottom={1}>
