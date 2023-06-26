@@ -6,7 +6,7 @@ import * as mui from "@mui/material";
 import * as React from "react";
 import Scrollbars from 'rc-scrollbars';
 import { useSnackbar } from 'notistack';
-import { isExistQueryStrings, makeCombData, processToken, sendData } from './utils';
+import { makeCombData, processToken, sendData } from './utils';
 
 //component
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -20,6 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 
+import { VerifyDialog, VerifyUtil } from 'midas-components';
 
 const typeValueOptions = [{value: 0, label: 'Add'}, {value: 1, label: 'Envelope'}, {value: 2, label: 'ABS'}, {value: 3, label: "SRSS"}];
 const activeValueOptions = ["ACTIVE", "INACTIVE"];
@@ -30,55 +31,6 @@ const defaultCombValues = {
   number: 0,
   active: "ACTIVE",
   data: [],
-}
-
-function FormDialog() {
-  const [open, setOpen] = React.useState(true);
-  const handleClose = () => setOpen(false);
-
-  const [baseUrl, setBaseUrl] = React.useState('');
-  const [mapiKey, setMapiKey] = React.useState('');
-  const handleOk = () => {
-    window.location.search = `?redirectTo=${baseUrl}&mapiKey=${mapiKey}`;
-  }
-
-  return (
-    <div>
-      <mui.Dialog open={open} onClose={handleClose}>
-        <mui.DialogTitle>Enter URL and MAPI-Key</mui.DialogTitle>
-        <mui.DialogContent>
-          <mui.DialogContentText>
-            To use the plugin, <br />
-            you need a base URL and an MAPI-key
-          </mui.DialogContentText>
-          <mui.TextField
-            autoFocus
-            margin="dense"
-            id="baseurl"
-            label="Base URL"
-            placeholder='ex) https://api-beta.midasit.com/civil'
-            type="email"
-            fullWidth
-            variant="standard"
-            onChange={(e) => setBaseUrl(e.target.value)}
-          />
-          <mui.TextField
-            margin="dense"
-            id="mapikey"
-            label="MAPI-Key"
-            type="email"
-            fullWidth
-            variant="standard"
-            onChange={(e) => setMapiKey(e.target.value)}
-          />
-        </mui.DialogContent>
-        <mui.DialogActions>
-          <mui.Button onClick={handleOk}>OK</mui.Button>
-          <mui.Button onClick={handleClose}>CANCEL</mui.Button>
-        </mui.DialogActions>
-      </mui.Dialog>
-    </div>
-  );
 }
 
 function Main() {
@@ -107,16 +59,12 @@ function Main() {
   }, [userLcomList]);
 
   React.useEffect(() => {
-    if (!isExistQueryStrings()) setOpenFormDlg(true);
-  }, [])
-
-  React.useEffect(() => {
-    if (isExistQueryStrings()) loadLcom();
+    if (VerifyUtil.isExistQueryStrings('mapiKey')) loadLcom();
   }, [loadLcom]);
 
   React.useEffect(() => {
     try {
-      if (isExistQueryStrings()) {
+      if (VerifyUtil.isExistQueryStrings('mapiKey')) {
         const newLcomList = [...lcomList];
         if (newLcomList.length > 0) {
           const lcomListLength = newLcomList.length;
@@ -374,128 +322,124 @@ function Main() {
 
   return (
     <>
-    {openFormDlg === true ? (
-      <FormDialog />
-      ) : (
-        <mui.Container>
-        <mui.Stack spacing={2} direction="row" alignItems="center" justifyContent="flex-start" sx={{height: '3rem', my: 1}}>
-          <Logo width={100} />
-          <mui.Typography>Load Combination Generator</mui.Typography>
-        </mui.Stack>
-        <mui.Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" maxWidth="xl">
-          <GridListComponents
-            dataRequested={requestData}
-            setDataRequested={setRequestData}
-            updateCombData={appendCombData}
-            additionalData={{LCOM: userLcomList}}
-            ref={ref}
-          />
-          <mui.Divider sx={{my: 2}} flexItem>
-            <mui.Button variant="outlined" onClick={() => setRequestData(true)} startIcon={<AddIcon />}>Add Items from List</mui.Button>
-          </mui.Divider>
-          <mui.Stack direction="row" width="100%" spacing={2}>
-            <mui.Box width="60%">
-              <Scrollbars autoHide autoHeightMax="636px" autoHeight style={{width: '100%'}}>
-                <DataGrid
-                  initialState={{
-                    filter: {
-                      filterModel: {
-                        items: [{ columnField: 'KIND', operatorValue: 'equals', value: 'GEN' }],
-                      },
-                    },
-                    columns: {
-                      columnVisibilityModel: {
-                        KIND: false,
-                      },
-                    },
-                  }}
-                  rows={lcomList}
-                  columns={LcomListGridDef}
-                  getRowId={(row) => row.key}
-                  density='compact'
-                  disableColumnMenu
-                  sx={{minWidth: '606px', height: '636px'}}
-                  experimentalFeatures={{ newEditingApi: true }}
-                  components={{
-                    Pagination: CustomPagination,
-                  }}
-                />
-              </Scrollbars>
-              <div style={{display: "flex", justifyContent: "center"}}>
-                <mui.Button onClick={handleReflectDataIntoCivil}>Send data to civil</mui.Button>
-                <mui.Button onClick={handleRefreshData}>Refresh All Data</mui.Button>
-              </div>
-            </mui.Box>
-            <mui.Box width="40%">
-              <mui.Grid container sx={{p: 1, width: '100%'}}>
-                <mui.Grid item xs={4}>
-                  <mui.TextField
-                    id="NumberField"
-                    label="No."
-                    variant="standard"
-                    fullWidth
-                    disabled
-                    value={combNumber}
-                     />
-                </mui.Grid>
-                <mui.Grid item xs>
-                  <mui.TextField
-                    id="NameField"
-                    label="Name"
-                    variant="standard"
-                    fullWidth
-                    value={combName}
-                    disabled={combNameLocked}
-                    onChange={(e) => setCombName(e.target.value)} />
-                </mui.Grid>
-              </mui.Grid>
-              <mui.Stack direction="row" spacing={1}>
-                <mui.Box width="50%" alignItems="center" justifyContent="space-around">
-                  <mui.Select fullWidth value={combActive} onChange={(e) => setCombActive(e.target.value)}>
-                    {activeValueOptions.map((value) => (
-                      <mui.MenuItem key={value} value={value}>{value}</mui.MenuItem>
-                    ))}
-                  </mui.Select>
-                </mui.Box>
-                <mui.Stack direction="row" alignItems="center" justifyContent="space-around" width="50%">
-                  <mui.Typography width="40%">Type</mui.Typography>
-                  <mui.Select
-                    fullWidth
-                    value={combType}
-                    onChange={(e) => setCombType(e.target.value)}
-                    sx={{width: '100%'}}
-                  >
-                    {typeValueOptions.map((value) => (
-                      <mui.MenuItem key={value.value} value={value.value}>{value.label}</mui.MenuItem>
-                    ))}
-                  </mui.Select>
-                </mui.Stack>
-              </mui.Stack>
-              <Scrollbars autoHide autoHeight autoHeightMax={'516px'} style={{width: '100%'}}>
-                <DataGrid
-                  rows={combData}
-                  columns={AllGridDef}
-                  getRowId={(row) =>row.NAME}
-                  density="compact"
-                  disableColumnMenu
-                  sx={{minWidth: '40%',height: '516px'}}
-                  onCellEditStop={handleOnCellEditCommit}
-                  experimentalFeatures={{ newEditingApi: true }}
-                  components={{
-                    Pagination: CustomPagination,
-                  }}
-                  />
-              </Scrollbars>
-              <div style={{display: "flex", justifyContent: "center"}}>
-                <mui.Button onClick={handleNew}>New</mui.Button>
-                <mui.Button onClick={handleRegisterLcom}>Registration</mui.Button>
-              </div>
-            </mui.Box>
-          </mui.Stack>
-        </mui.Box>
-      </mui.Container>
-      )
-    }
+			<VerifyDialog />
+			<mui.Container>
+			<mui.Stack spacing={2} direction="row" alignItems="center" justifyContent="flex-start" sx={{height: '3rem', my: 1}}>
+				<Logo width={100} />
+				<mui.Typography>Load Combination Generator</mui.Typography>
+			</mui.Stack>
+			<mui.Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" maxWidth="xl">
+				<GridListComponents
+					dataRequested={requestData}
+					setDataRequested={setRequestData}
+					updateCombData={appendCombData}
+					additionalData={{LCOM: userLcomList}}
+					ref={ref}
+				/>
+				<mui.Divider sx={{my: 2}} flexItem>
+					<mui.Button variant="outlined" onClick={() => setRequestData(true)} startIcon={<AddIcon />}>Add Items from List</mui.Button>
+				</mui.Divider>
+				<mui.Stack direction="row" width="100%" spacing={2}>
+					<mui.Box width="60%">
+						<Scrollbars autoHide autoHeightMax="636px" autoHeight style={{width: '100%'}}>
+							<DataGrid
+								initialState={{
+									filter: {
+										filterModel: {
+											items: [{ columnField: 'KIND', operatorValue: 'equals', value: 'GEN' }],
+										},
+									},
+									columns: {
+										columnVisibilityModel: {
+											KIND: false,
+										},
+									},
+								}}
+								rows={lcomList}
+								columns={LcomListGridDef}
+								getRowId={(row) => row.key}
+								density='compact'
+								disableColumnMenu
+								sx={{minWidth: '606px', height: '636px'}}
+								experimentalFeatures={{ newEditingApi: true }}
+								components={{
+									Pagination: CustomPagination,
+								}}
+							/>
+						</Scrollbars>
+						<div style={{display: "flex", justifyContent: "center"}}>
+							<mui.Button onClick={handleReflectDataIntoCivil}>Send data to civil</mui.Button>
+							<mui.Button onClick={handleRefreshData}>Refresh All Data</mui.Button>
+						</div>
+					</mui.Box>
+					<mui.Box width="40%">
+						<mui.Grid container sx={{p: 1, width: '100%'}}>
+							<mui.Grid item xs={4}>
+								<mui.TextField
+									id="NumberField"
+									label="No."
+									variant="standard"
+									fullWidth
+									disabled
+									value={combNumber}
+										/>
+							</mui.Grid>
+							<mui.Grid item xs>
+								<mui.TextField
+									id="NameField"
+									label="Name"
+									variant="standard"
+									fullWidth
+									value={combName}
+									disabled={combNameLocked}
+									onChange={(e) => setCombName(e.target.value)} />
+							</mui.Grid>
+						</mui.Grid>
+						<mui.Stack direction="row" spacing={1}>
+							<mui.Box width="50%" alignItems="center" justifyContent="space-around">
+								<mui.Select fullWidth value={combActive} onChange={(e) => setCombActive(e.target.value)}>
+									{activeValueOptions.map((value) => (
+										<mui.MenuItem key={value} value={value}>{value}</mui.MenuItem>
+									))}
+								</mui.Select>
+							</mui.Box>
+							<mui.Stack direction="row" alignItems="center" justifyContent="space-around" width="50%">
+								<mui.Typography width="40%">Type</mui.Typography>
+								<mui.Select
+									fullWidth
+									value={combType}
+									onChange={(e) => setCombType(e.target.value)}
+									sx={{width: '100%'}}
+								>
+									{typeValueOptions.map((value) => (
+										<mui.MenuItem key={value.value} value={value.value}>{value.label}</mui.MenuItem>
+									))}
+								</mui.Select>
+							</mui.Stack>
+						</mui.Stack>
+						<Scrollbars autoHide autoHeight autoHeightMax={'516px'} style={{width: '100%'}}>
+							<DataGrid
+								rows={combData}
+								columns={AllGridDef}
+								getRowId={(row) =>row.NAME}
+								density="compact"
+								disableColumnMenu
+								sx={{minWidth: '40%',height: '516px'}}
+								onCellEditStop={handleOnCellEditCommit}
+								experimentalFeatures={{ newEditingApi: true }}
+								components={{
+									Pagination: CustomPagination,
+								}}
+								/>
+						</Scrollbars>
+						<div style={{display: "flex", justifyContent: "center"}}>
+							<mui.Button onClick={handleNew}>New</mui.Button>
+							<mui.Button onClick={handleRegisterLcom}>Registration</mui.Button>
+						</div>
+					</mui.Box>
+				</mui.Stack>
+			</mui.Box>
+		</mui.Container>
     </>
   )
 }

@@ -1,12 +1,7 @@
-export function isExistQueryStrings() {
-  const param = new URLSearchParams(window.location.search);
-  const mapiKey = param.get('mapiKey') || "";
-  const redirectUrl = param.get('redirectTo') || "";
-  return ( mapiKey !== "" );
-}
+import { VerifyUtil } from 'midas-components';
 
-const getKeyAuthResult = async (baseUrl ,key) => {
-  const Url = baseUrl + "/mapikey/verify";
+const getKeyAuthResult = async (key) => {
+  const Url = (VerifyUtil.getProductionUrl()) + "/mapikey/verify";
   const response = await fetch(Url, {
     method: "GET",
     headers: {
@@ -25,10 +20,8 @@ const getKeyAuthResult = async (baseUrl ,key) => {
 }
 
 export const loadData = async (targetUrl) => {
-    const param = new URLSearchParams(window.location.search);
-    const mapiKey = param.get('mapiKey') || "";
-    const redirectUrl = param.get('redirectTo') || window.location.origin;
-    const isValidKey = getKeyAuthResult(redirectUrl, mapiKey);
+    const mapiKey = VerifyUtil.getMapiKey();
+    const isValidKey = getKeyAuthResult(mapiKey);
     if( isValidKey ) {
       let opts = {
         headers: {
@@ -38,7 +31,7 @@ export const loadData = async (targetUrl) => {
       };
   
       try {
-        const res = await fetch(redirectUrl + "/civil" + targetUrl, opts);
+        const res = await fetch((await VerifyUtil.getBaseUrlAsync()) + targetUrl, opts);
         const json = await res.json();
         return json;
       } catch (_) {
@@ -50,10 +43,8 @@ export const loadData = async (targetUrl) => {
 };
 
 export const sendData = async (targetUrl, body, method = "PUT") => {
-  const param = new URLSearchParams(window.location.search);
-  const mapiKey = param.get('mapiKey') || "";
-  const redirectUrl = param.get('redirectTo') || window.location.origin;
-  const isValidKey = getKeyAuthResult(redirectUrl, mapiKey);
+  const mapiKey = VerifyUtil.getMapiKey();
+  const isValidKey = getKeyAuthResult(mapiKey);
   if( isValidKey ) {
     let opts = {
       method: method,
@@ -65,7 +56,7 @@ export const sendData = async (targetUrl, body, method = "PUT") => {
     };
 
     try {
-      const res = await fetch(redirectUrl  + "/civil" + targetUrl, opts);
+      const res = await fetch((await VerifyUtil.getBaseUrlAsync())  + "/civil" + targetUrl, opts);
       const json = await res.json();
       return json;
     } catch (_) {

@@ -15,6 +15,8 @@ import * as Modals from './Components/Modal'
 import * as Common from './Function/Common';
 import * as Spline from './Function/Logic';
 
+import { VerifyDialog } from 'midas-components';
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -95,6 +97,7 @@ function App() {
 				} else if (radioOp==="CCS") {
 					setSplineAngle(Spline.ClampedCubicSpline(nodeVertix[1],nodeVertix[2],div,startPt,endPt));
 				}
+				console.log(splineAngle);
 				let dviSplineChart = new Array(splineAngle.length);
 				for (let i = 0; i < splineAngle.length; i++) {
 					dviSplineChart[i] = {
@@ -158,6 +161,7 @@ function App() {
 
   return (
 		<div className="App">
+			<VerifyDialog />
 			<div className = "MainApp">
 			<Box sx={{ flexGrow: 1 }}>
 			<h4 className="titleStyle">Cubic Spline</h4>
