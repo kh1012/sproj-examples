@@ -347,10 +347,11 @@ function App() {
 											<NativeSelect
 												value={baseURL}
 												onChange={(event) => { setBaseURL(event.target.value) }}
-												defaultValue={10}
+												defaultValue={30}
 											>
 												<option value={10}>http://localhost:10024</option>
 												<option value={20}>https://api-beta.rpm.kr-dv-midasit.com/civil</option>
+												<option value={30}>https://api-beta.midasit.com/civil</option>
 											</NativeSelect>
 										</FormControl>
 									</Tooltip>
