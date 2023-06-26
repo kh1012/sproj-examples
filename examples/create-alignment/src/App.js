@@ -35,6 +35,7 @@ import { ResponsiveLine } from "@nivo/line";
 import { cloneDeep } from "lodash"
 import MainSubModule from './CreateLayout';
 import CalculationXY from './CalculationXY';
+import { VerifyDialog, VerifyUtil } from 'midas-components';
 
 //������Դϴ�
 
@@ -201,27 +202,29 @@ function App() {
 		}
 	}
 
-	const urlParamHandler = async (param) => {
-    const urlParams = new URLSearchParams(param);
-    const mapiKey = urlParams.get("mapiKey")
-		console.log(mapiKey);
-		const verifyResult = await getKeyAuthResult(mapiKey);
-		console.log(verifyResult);
-		if (verifyResult) {
-			setMapiKey(mapiKey);
-		}
-  }
+	// const urlParamHandler = async (param) => {
+  //   const urlParams = new URLSearchParams(param);
+  //   const mapiKey = urlParams.get("mapiKey")
+	// 	console.log(mapiKey);
+	// 	const verifyResult = await getKeyAuthResult(mapiKey);
+	// 	console.log(verifyResult);
+	// 	if (verifyResult) {
+	// 		setMapiKey(mapiKey);
+	// 	}
+  // }
+
 	async function setBasicInfo() {
-		setBaseURL(window.location.origin);
+		setBaseURL(await VerifyUtil.getBaseUrlAsync());
+		setMapiKey(VerifyUtil.getMapiKey());
 	}
 
 	React.useEffect(() => {
 		setBasicInfo();
 	}, [])
 
-	React.useEffect(() => {
-		urlParamHandler(location.search);
-	}, [baseURL])
+	// React.useEffect(() => {
+	// 	urlParamHandler(location.search);
+	// }, [baseURL])
 
 	React.useEffect(()=> {
 		setChartData(() => {
@@ -310,8 +313,6 @@ function App() {
 			valueError = false;	
 		}
 		
-		console.log(baseURL);
-		console.log(mapiKey);
 		if (valueError === true && baseURL !== "" && mapiKey !== "") {
 			return [baseURL, mapiKey, programName, M_NODE, M_ELEM, M_LINE, M_SEGM];
 		} else {
@@ -320,18 +321,19 @@ function App() {
 	}
 
 	//API Send
-	const handleAPI = () => {
+	const handleAPI = async () => {
 		let DataSet = DataBuilding();
 		
 		if (DataSet === false ) {
 			handleOpen();
 		} else {
-			MainSubModule(...DataSet);
+			await MainSubModule(...DataSet);
 		}
 	}
 
 	return (
 		<div className="App">
+			<VerifyDialog />
 			<header className="App-header">
 				<div className="Grid">
 					<Box sx={{ flexGrow: 1 }}>
@@ -348,6 +350,7 @@ function App() {
 												value={baseURL}
 												onChange={(event) => { setBaseURL(event.target.value) }}
 												defaultValue={30}
+												disabled
 											>
 												<option value={10}>http://localhost:10024</option>
 												<option value={20}>https://api-beta.rpm.kr-dv-midasit.com/civil</option>
@@ -379,6 +382,7 @@ function App() {
 													</InputAdornment>
 												)
 											}}
+											disabled
 										/>
 									</Box>
 								</Item>

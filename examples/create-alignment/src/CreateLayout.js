@@ -1,15 +1,14 @@
 export default MainSubModule;
 
-function MainSubModule(URI, KEY, PROGRAM, NODE, ELEM, LINE, SEGM) {
+async function MainSubModule(URI, KEY, PROGRAM, NODE, ELEM, LINE, SEGM) {
     let JsonInput = {
         NODE_NB: NODE,
         ELEM_NB: ELEM,
         LINE_TYPE: LINE,
         SEG_INFO: SEGM
     };
-    console.log(JsonInput)
     const serverUri = URI + "/" + PROGRAM;
-    let NodeCoor = CreateLayout(serverUri, KEY, JsonInput);
+    let NodeCoor = await CreateLayout(serverUri, KEY, JsonInput);
     return NodeCoor
 }
 
@@ -233,11 +232,6 @@ async function CreateLayout(baseUrl, Mapi_Key, jsonInput) {
         Ti[i + 1] = TempAlin[2];
     }
 
-    console.log(Alin_Info);
-    console.log(Seg_Info);
-    console.log(Xi);
-    console.log(Yi);
-    console.log(Ti);
     const dbNODE = await CreateNode(baseUrl, Mapi_Key, Node_Start, Xi, Yi);
     const dbELEM = await CreateElem(
         baseUrl,
