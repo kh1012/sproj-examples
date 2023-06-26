@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/sproj-examples/examples/local-axis/static/css/main.90f8a27a.css",
-    "main.js": "/sproj-examples/examples/local-axis/static/js/main.1a4c42e1.js",
+    "main.js": "/sproj-examples/examples/local-axis/static/js/main.6a26ba4d.js",
     "static/js/787.fd4eaba8.chunk.js": "/sproj-examples/examples/local-axis/static/js/787.fd4eaba8.chunk.js",
     "static/media/help.svg": "/sproj-examples/examples/local-axis/static/media/help.c57cc2eefad389944f68fbbfb353e06a.svg",
     "index.html": "/sproj-examples/examples/local-axis/index.html",
     "main.90f8a27a.css.map": "/sproj-examples/examples/local-axis/static/css/main.90f8a27a.css.map",
-    "main.1a4c42e1.js.map": "/sproj-examples/examples/local-axis/static/js/main.1a4c42e1.js.map",
+    "main.6a26ba4d.js.map": "/sproj-examples/examples/local-axis/static/js/main.6a26ba4d.js.map",
     "787.fd4eaba8.chunk.js.map": "/sproj-examples/examples/local-axis/static/js/787.fd4eaba8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.90f8a27a.css",
-    "static/js/main.1a4c42e1.js"
+    "static/js/main.6a26ba4d.js"
   ]
 }
