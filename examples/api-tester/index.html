@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>API TEST DEV 1.0</title>
+    <meta charset="utf-8">
+
+    <!-- JQUERY -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <!-- FOMANTIC UI -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+
+    <!-- CHART.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- W3.CSS -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <!-- APP MODULES -->
+    <script src="./js/model.js"></script>
+    <script src="./js/assign.js"></script>
+
+</head>
+
+
+
+
+<body>
+
+    <!-- LOADER -->
+    <div class="ui active dimmer" style="display: none;">
+        <div class="ui text loader"></div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="ui modal">
+        <div class="header"></div>
+        <div class="content"></div>
+        <div class="actions"></div>
+    </div>
+
+
+    <!-- PANEL -->
+    <div class="w3-content" style="max-width:1200px;">
+
+        <!-- TOP BAR -->
+        <div class="w3-container w3-black"
+            style="padding: 10px 0px 10px 20px; color: rgba(255, 255, 255, 0.8) !important">
+            <h4>MIDAS API TEST DEV. 1.0</h4>
+        </div>
+
+        <div class="w3-row">
+            <div class="w3-half" style="padding: 20px 10px 20px 0px">
+
+                <!-- PANEL -->
+                <div class="ui segment" style="background-color: #F9FAFB;padding: 20px 20px 20px 20px;">
+                    <h5 class="ui horizontal divider header" style="margin-top: 10px;"><i class="key icon"
+                            style="font-size: 15px;"></i>API
+                        CONNECTION
+                    </h5>
+                    <div class="ui small form">
+                        <div class="field">
+                            <label>MAPI-Key</label>
+                            <input id="con_map_key" type="text" placeholder="MAPI-Key">
+                        </div>
+                        <div class="field">
+                            <label>URL</label>
+                            <input id="con_url" type="text" placeholder="URL">
+                        </div>
+                        <div class="three small fields">
+                            <div class="field"></div>
+                            <div class="field"></div>
+                            <div class="field"><button id="btn-check-conn" class="ui basic primary button"
+                                    style="width: 100%; margin-top: 20px;">Check</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANEL -->
+                <div class="ui segment" style="background-color: #F9FAFB;padding: 20px 20px 20px 20px;">
+                    <h5 class="ui horizontal divider header" style="margin-top: 10px;"><i class="cube icon"
+                            style="font-size: 15px;"></i>
+                        PLATE MODEL
+                    </h5>
+                    <div class="ui small form">
+
+                        <div class="three fields">
+                            <div class="field">
+                                <div class="field">
+                                    <label>Modulus E [kN/m<sup>2</sup>]</label>
+                                    <input id="mat_E" type="text" value="29000000">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field">
+                                    <label>Poisson v</label>
+                                    <input id="mat_v" type="text" value="0.2">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field">
+                                    <label>Plate pressure [kN/m<sup>2</sup>]</label>
+                                    <input id="plate_p" type="text" value="50">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="three fields">
+                            <div class="field">
+                                <div class="field">
+                                    <label>Plate width-X [m]</label>
+                                    <input id="plate_w" type="text" value="10.0">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field">
+                                    <label>Plate height-Y [m]</label>
+                                    <input id="plate_h" type="text" value="6.0">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field">
+                                    <label>Plate thickness [m]</label>
+                                    <input id="plate_t" type="text" value="0.25">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="three fields">
+                            <div class="field">
+                                <div class="field">
+                                    <label>FE number-X</label>
+                                    <input id="plate_w_num" type="number" value="10">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field">
+                                    <label>FE number-Y</label>
+                                    <input id="plate_h_num" type="number" value="6">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field">
+                                    <label>Constrains</label>
+                                    <div class="ui selection dropdown">
+                                        <div class="text"></div>
+                                        <i class="dropdown icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="three small fields">
+                            <div class="field"></div>
+                            <div class="field"></div>
+                            <div class="field"><button id="btn-plate-create" class="ui primary  basic button"
+                                    style="width: 100%; margin-top: 20px;">Generate</button></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="w3-half" style="padding: 20px 0px 20px 10px">
+
+                <!-- RIGHT PANEL -->
+                <div class="ui segment">
+
+                    <h5 class="ui horizontal divider header" style="margin-top: 15px;">
+                        <i class="chart bar icon" style="font-size: 15px;"></i>CHART RESULT
+                    </h5>
+                    <div class="w3-row">
+                        <div class="w3-half"><canvas id="res_chart_x" style="width:100%;height:280px"></canvas></div>
+                        <div class="w3-half"><canvas id="res_chart_y" style="width:100%;height:280px"></canvas></div>
+                    </div>
+
+                    <h5 class="ui horizontal divider header" style="margin-top: 10px;">
+                        <i class="table icon" style="font-size: 15px;"></i>TABLE RESULT
+                    </h5>
+
+                    <table class="ui compact mini table" style="margin-bottom: 0px;">
+                        <thead>
+                            <tr>
+                                <th style="width:33%">ID</th>
+                                <th style="width:33%">Direction</th>
+                                <th style="width:33%">Displacement [mm]</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div style="overflow-y: auto; height: 180px;">
+                        <table class="ui compact mini table" style="margin-bottom: 0px;border-bottom-width: 1px;">
+                            <tbody id="table-res"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="ui small form">
+                        <div class="three small fields">
+                            <div class="field"></div>
+                            <div class="field"></div>
+                            <div class="field"><button id="btn-plate-analysis" class="ui primary  basic button"
+                                    style="width: 100%; margin-top: 20px;margin-bottom: 3px;">Analysis</button></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+
+
+
+
+<script>
+
+    $(function () {
+
+        $('.ui.dropdown').dropdown({ values: [{ name: 'Pinned sides', value: '', selected: true }] });
+        ASSIGN.initChart([], [], "res_chart_x", "Side X");
+        ASSIGN.initChart([], [], "res_chart_y", "Side Y");
+
+        $('#btn-check-conn').click(() => { ASSIGN.checkConnection(); });
+        $('#btn-plate-create').click(() => { ASSIGN.assignModel(); });
+        $('#btn-plate-analysis').click(() => { ASSIGN.preformAnalysis(); });
+
+
+    });
+
+</script>
+
+</html>
