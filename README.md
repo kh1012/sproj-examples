@@ -5,7 +5,7 @@ This repository stores MIDAS API Plugin examples.
 ## Description
 - 📁 samples_src/
   - 개발 된 소스파일 보관 폴더
-- 📁 /samples/
+- 📁 /samples
   - Plugin 업로드 테스트용 빌드 파일 보관 폴더
 <br />
 
