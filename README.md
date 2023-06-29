@@ -1,13 +1,12 @@
-# :zap: Midas API Plugin Examples
+# ⚡ Midas API Plugin Examples
 This repository stores MIDAS API Plugin examples.
 <br /><br />
 
-## /samples_src/
-- 개발 된 소스파일 보관 폴더
-<br />
-
-## /samples/
-- Plugin 업로드 테스트용 빌드 파일 보관 폴더
+## Description
+- 📁 samples_src/
+  - 개발 된 소스파일 보관 폴더
+- 📁 /samples/
+  - Plugin 업로드 테스트용 빌드 파일 보관 폴더
 <br />
 
 ## Example Demos
