@@ -321,7 +321,7 @@ function Main() {
 
   return (
     <>
-			<VerifyDialog />
+			{/* <VerifyDialog /> */}
 			<mui.Container>
 			<mui.Stack spacing={2} direction="row" alignItems="center" justifyContent="flex-start" sx={{height: '3rem', my: 1}}>
 				<Logo width={100} />
