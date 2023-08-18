@@ -5,10 +5,17 @@ export const DataLoader = async () => {
     const checkPath = "STLD";
     const dbPath = "STCT";
     
-    const checkPathResult = await loadData(path + checkPath);
-    if (hasError(checkPathResult)) return [];
+    // const checkPathResult = await loadData(path + checkPath);
+    // if (hasError(checkPathResult)) return [];
     
-    const rawData = await loadData(path + dbPath);
+    // const rawData = await loadData(path + dbPath);
+	const rawData = {
+		"STCT": {
+			"1": {
+				"vEREC": [],
+			}
+		}
+	};
     if (hasError(rawData)) return [];
     
     const registeredNames = [];

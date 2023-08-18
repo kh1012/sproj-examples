@@ -1,9 +1,19 @@
 import { loadData, hasError } from "../utils";
 
 export const DataLoader = async () => {
-    const path = "/db/";
+    // const path = "/db/";
     const dbPath = "SMLC";
-    const rawData = await loadData(path + dbPath);
+	const rawData = {
+		"SMLC": {
+			"1": {
+				"NAME": "Settlement Load 1",
+			},
+			"2": {
+				"NAME": "Settlement Load 2",
+			},
+		}
+	};
+    // const rawData = await loadData(path + dbPath);
     if (hasError(rawData)) return [];
     if (rawData[dbPath] === undefined) return [];
     
