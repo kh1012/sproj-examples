@@ -50,7 +50,6 @@ function Main() {
   const [combName, setCombName] = React.useState(defaultCombValues.name);
   const [combNameLocked, setCombNameLocked] = React.useState(false);
   const [combNumber, setCombNumber] = React.useState(defaultCombValues.number);
-  const [openFormDlg, setOpenFormDlg] = React.useState(false);
 
   const loadLcom = React.useCallback(async() => {
     const result = await LCOM.DataRawLoader({user: userLcomList});
@@ -145,7 +144,7 @@ function Main() {
   };
 
   const refreshLocalComponent = () => {
-    ref.current.init();
+    // ref.current.init();
     loadLcom();
     initializeCombInput();
   }
@@ -156,8 +155,8 @@ function Main() {
   };
 
   const handleRefreshData = () => {
-    setUserLcomList([]);
-    ref.current.init();
+	  setUserLcomList([]);
+	  // ref.current.init();
     initializeCombInput();
   };
   
@@ -216,7 +215,7 @@ function Main() {
 
       const bodyString = JSON.stringify(dataObject);
       const targetUrl = "/db/LCOM-GEN";
-      await sendData(targetUrl, bodyString, "PUT");
+    //   await sendData(targetUrl, bodyString, "PUT");
     };
 
     awaiter();

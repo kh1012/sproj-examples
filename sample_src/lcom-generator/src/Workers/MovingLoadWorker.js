@@ -11,11 +11,18 @@ const NationalDefinitions = {
 };
 
 export const DataLoader = async () => {
-    const path = "/db/";
+    // const path = "/db/";
     const dbPath = "MVLD";
     const variantPath = "MVCD";
 
-    const natlCodeData = await loadData(path + variantPath);
+	const natlCodeData = {
+		"MVCD": {
+			"1": {
+				"CODE": "EUROCODE"
+			}
+		}
+	};
+    // const natlCodeData = await loadData(path + variantPath);
     if (hasError(natlCodeData)) return [];
 
     const natlCode = natlCodeData[variantPath][1]["CODE"];
@@ -24,7 +31,20 @@ export const DataLoader = async () => {
     if (NationalDefinitions[natlCode] !== undefined)
         natlCodePostFix = NationalDefinitions[natlCode];
 
-    const rawData = await loadData(path + dbPath + natlCodePostFix);
+	const rawData = {
+		"MVLD": {
+			"1": {
+				"LCNAME": "Moving Load 1",
+			},
+			"2": {
+				"LCNAME": "Moving Load 2",
+			},
+			"3": {
+				"LCNAME": "Moving Load 3",
+			},
+		}
+	};
+    // const rawData = await loadData(path + dbPath + natlCodePostFix);
     if (hasError(rawData)) return [];
     if (rawData[dbPath] === undefined) return [];
     
@@ -35,5 +55,6 @@ export const DataLoader = async () => {
         registeredNames.push(targetData.LCNAME);
     };
 
+	console.log(registeredNames);
     return registeredNames;
 };

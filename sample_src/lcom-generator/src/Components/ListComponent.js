@@ -88,7 +88,7 @@ export function ListComponent(props) {
                     disablePadding
                     dense
                     secondaryAction={
-                        isEmpty(listData) && (<Checkbox checked={isFullyChecked} onClick={handleOnClick} />)
+                        isEmpty(listData) && (<Checkbox checked={isFullyChecked} onClick={handleOnClick} indeterminate={!isFullyChecked && checkList.length !== 0} />)
                     }
                 >
                     <ListItemButton onClick={handleOnClick}>
