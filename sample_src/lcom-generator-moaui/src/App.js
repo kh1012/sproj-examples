@@ -7,7 +7,6 @@ import MoaDroplist from "@midasit-dev/moaui/dist/DropList";
 import MoaStack from "@midasit-dev/moaui/dist/Stack";
 import MoaTextField from "@midasit-dev/moaui/dist/TextField";
 import MoaGrid from "@midasit-dev/moaui/dist/Grid";
-// import MoaTextField from "@mui/material/TextField";
 import MoaTypography from "@midasit-dev/moaui/dist/Typography";
 import MoaPanel from "@midasit-dev/moaui/dist/Panel";
 import * as mui from "@mui/material";
@@ -15,15 +14,15 @@ import * as React from "react";
 import Scrollbars from "rc-scrollbars";
 import { useSnackbar } from "notistack";
 import {
-	isExistQueryStrings,
 	makeCombData,
 	processToken,
 	sendData,
 } from "./utils";
+import { VerifyUtil } from 'midas-components';
 
 //component
 import MoaDataGrid from "@midasit-dev/moaui/dist/DataGrid";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { GridActionsCellItem } from "@mui/x-data-grid";
 import { GridListComponents } from "./Components/GridListComponents";
 import { CustomPagination } from "./Components/CustomFooterComponent";
 
@@ -89,10 +88,7 @@ function FormDialog() {
 						type="email"
 						fullWidth
 						variant="standard"
-						onChange={(e) => {
-							console.log(e);
-							setBaseUrl(e.target.value);
-						}}
+						onChange={handleBaseUrlChange}
 					/>
 					<div style={{ height: "1rem" }} />
 					<MoaTypography variant="h1">MAPI-Key</MoaTypography>
@@ -136,6 +132,8 @@ function Main() {
 	const [combNumber, setCombNumber] = React.useState(defaultCombValues.number);
 	const [openFormDlg, setOpenFormDlg] = React.useState(false);
 
+	const isPortrate = mui.useMediaQuery('(orientation: portrait)');
+
 	const loadLcom = React.useCallback(async () => {
 		const result = await LCOM.DataRawLoader({ user: userLcomList });
 		if (!result) return;
@@ -143,16 +141,18 @@ function Main() {
 	}, [userLcomList]);
 
 	React.useEffect(() => {
-		if (!isExistQueryStrings()) setOpenFormDlg(true);
+		if (!VerifyUtil.isExistQueryStrings('redirectTo') && !VerifyUtil.isExistQueryStrings('mapiKey')) {
+			setOpenFormDlg(true);
+		}
 	}, []);
 
 	React.useEffect(() => {
-		if (isExistQueryStrings()) loadLcom();
+		if (VerifyUtil.isExistQueryStrings('mapiKey')) loadLcom();
 	}, [loadLcom]);
 
 	React.useEffect(() => {
 		try {
-			if (isExistQueryStrings()) {
+			if (VerifyUtil.isExistQueryStrings('mapiKey')) {
 				const newLcomList = [...lcomList];
 				if (newLcomList.length > 0) {
 					const lcomListLength = newLcomList.length;
@@ -242,7 +242,7 @@ function Main() {
 	}, []);
 
 	const refreshLocalComponent = React.useCallback(() => {
-		ref.current.init();
+		// ref.current.init();
 		loadLcom();
 		initializeCombInput();
 	}, [initializeCombInput, loadLcom]);
@@ -254,7 +254,7 @@ function Main() {
 
 	const handleRefreshData = React.useCallback(() => {
 		setUserLcomList([]);
-		ref.current.init();
+		// ref.current.init();
 		initializeCombInput();
 	}, [initializeCombInput]);
 
@@ -460,18 +460,20 @@ function Main() {
 	);
 
 	return (
-		<React.Fragment>
+		<div style={{width:"100%", display: "flex", justifyContent: "center"}}>
 			{openFormDlg === true ? (
 				<FormDialog />
 			) : (
-				<MoaPanel>
-					<GridListComponents
-						dataRequested={requestData}
-						setDataRequested={setRequestData}
-						updateCombData={appendCombData}
-						additionalData={{ LCOM: userLcomList }}
-						ref={ref}
-					/>
+				<MoaStack width="100%" maxWidth="712px">
+					<MoaStack marginX={2}>
+						<GridListComponents
+							dataRequested={requestData}
+							setDataRequested={setRequestData}
+							updateCombData={appendCombData}
+							additionalData={{ LCOM: userLcomList }}
+							ref={ref}
+						/>
+					</MoaStack>
 					<mui.Divider sx={{ my: 2 }} flexItem>
 						<mui.Button
 							variant="outlined"
@@ -481,11 +483,11 @@ function Main() {
 							Add Items from List
 						</mui.Button>
 					</mui.Divider>
-					<MoaStack direction="row" width="100%" spacing={2}>
-						<div>
+					<MoaStack direction={isPortrate ? "column" : "row"} width="100%" spacing={1} justifyContent="center">
+						<MoaStack direction="column" width={isPortrate? "100%" : "48%"}>
 							<Scrollbars
 								autoHide
-								autoHeightMax="636px"
+								autoHeightMax="584px"
 								autoHeight
 							>
 								<MoaDataGrid
@@ -512,7 +514,7 @@ function Main() {
 									getRowId={(row) => row.key}
 									density="compact"
 									disableColumnMenu
-									sx={{ minWidth: "606px", height: "636px" }}
+									sx={{ width: "100%", height: "584px" }}
 									experimentalFeatures={{ newEditingApi: true }}
 									components={{
 										Pagination: CustomPagination,
@@ -527,53 +529,63 @@ function Main() {
 									Refresh All Data
 								</MoaButton>
 							</MoaStack>
-						</div>
-						<div>
-							<MoaGrid container justifyContent="space-between" width="100%" gap={2} paddingBottom={1}>
-								<MoaGrid item>
-									<MoaTextField
-										id="NumberField"
-										title="No."
-										variant="standard"
-										disabled
-										value={combNumber}
-									/>
-								</MoaGrid>
-								<MoaGrid item>
-									<MoaTextField
-										id="NameField"
-										title="Name"
-										variant="standard"
-										fullWidth
-										value={combName}
-										disabled={combNameLocked}
-										onChange={(e) => setCombName(e.target.value)}
-									/>
-								</MoaGrid>
-							</MoaGrid>
-							<MoaStack direction="row" spacing={1} paddingBottom={1} width="100%" justifyContent="space-between">
-								<MoaDroplist
-									title="Active"
-									// itemList={() => {
-									// 	let map = new Map();
-									// 	for (const value in activeValueOptions) {
-									// 		map.set(value, value);
-									// 	}
-									// 	return map;
-									// }}
-									value={combActive}
-									onChange={(e) => setCombActive(e.target.value)}		
+						</MoaStack>
+						<MoaStack direction="column" width={isPortrate? "100%" : "48%"}>
+							<MoaStack direction="row" justifyContent="space-between" width="100%" paddingBottom={1}>
+								<MoaTextField
+									id="NumberField"
+									title="No."
+									variant="standard"
+									disabled
+									value={combNumber}
 								/>
-								<MoaDroplist
-									title="Type"
-									value={combType}
-									onChange={(e) => setCombType(e.target.value)}
+								<MoaTextField
+									id="NameField"
+									title="Name"
+									variant="standard"
+									value={combName}
+									disabled={combNameLocked}
+									onChange={(e) => setCombName(e.target.value)}
 								/>
+							</MoaStack>
+							<MoaStack direction="row" spacing={1} paddingBottom={1} width="100%" justifyContent="space-between" alignItems="center">
+								<MoaStack direction="row" spacing={1} width="50%" alignItems="center">
+									<MoaTypography>Active</MoaTypography>
+									<MoaDroplist
+										width="100%"
+										title="Active"
+										itemList={() => {
+											let map = new Map();
+											for (const value of activeValueOptions) {
+												map.set(value, value);
+											}
+											return map;
+										}}
+										value={combActive}
+										onChange={(e) => setCombActive(e.target.value)}		
+									/>
+								</MoaStack>
+								<MoaStack direction="row" spacing={1} width="50%" alignItems="center">
+									<MoaTypography>Type</MoaTypography>
+									<MoaDroplist
+										width="100%"
+										title="Type"
+										itemList={() => {
+											let map = new Map();
+											for (const value of typeValueOptions) {
+												map.set(value.label, value.value);
+											}
+											return map;
+										}}
+										value={combType}
+										onChange={(e) => setCombType(e.target.value)}
+									/>
+								</MoaStack>
 							</MoaStack>
 							<Scrollbars
 								autoHide
 								autoHeight
-								autoHeightMax={"516px"}
+								autoHeightMax={"512px"}
 								style={{ width: "100%" }}
 							>
 								<MoaDataGrid
@@ -582,7 +594,7 @@ function Main() {
 									getRowId={(row) => row.NAME}
 									density="compact"
 									disableColumnMenu
-									sx={{ minWidth: "40%", height: "516px" }}
+									sx={{ minWidth: "40%", height: "512px" }}
 									onCellEditStop={handleOnCellEditCommit}
 									experimentalFeatures={{ newEditingApi: true }}
 									components={{
@@ -594,11 +606,11 @@ function Main() {
 								<MoaButton onClick={handleNew}>New</MoaButton>
 								<MoaButton onClick={handleRegisterLcom}>Registration</MoaButton>
 							</MoaStack>
-						</div>
+						</MoaStack>
 					</MoaStack>
-				</MoaPanel>
+				</MoaStack>
 			)}
-		</React.Fragment>
+		</div>
 	);
 }
 
