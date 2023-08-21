@@ -32,7 +32,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
-import TitleArea from "./Components/Titlebar";
+
 
 const typeValueOptions = [
 	{ value: 0, label: "Add" },
@@ -461,7 +461,6 @@ function Main() {
 
 	return (
 		<React.Fragment>
-			<TitleArea title="Load Combination Generator" />
 			{openFormDlg === true ? (
 				<FormDialog />
 			) : (

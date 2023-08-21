@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import { SnackbarProvider } from 'notistack';
 import { ThemeProvider, createTheme } from '@mui/material';
+import TitleArea from "./Components/Titlebar";
 
 const defaultTheme = createTheme({
 	typography: {
@@ -20,6 +21,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <SnackbarProvider anchorOrigin={{horizontal: "center", vertical: "top"}}>
 	<ThemeProvider theme={defaultTheme}>
+		<TitleArea title="Load Combination Generator" />
 		<App />
 	</ThemeProvider>
   </SnackbarProvider>
