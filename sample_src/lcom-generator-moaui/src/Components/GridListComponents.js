@@ -1,7 +1,9 @@
 import * as React from "react";
 import * as mui from "@mui/material";
 import MoaButton from "@midasit-dev/moaui/dist/Button";
+import MoaGrid from "@midasit-dev/moaui/dist/Grid";
 import Typography from "@midasit-dev/moaui/dist/Typography";
+import MoaStack from "@midasit-dev/moaui/dist/Stack";
 import { ListComponent } from "./ListComponent";
 import { useSnackbar } from "notistack";
 import { makeObject, setStateUpdate } from "../utils";
@@ -13,9 +15,6 @@ import * as CSCS from "../Workers/ConstructStageWorker";
 import * as SPLC from "../Workers/ResponseSpectrumWorker";
 import * as SMLC from "../Workers/SettlementWorker";
 import * as MVLD from "../Workers/MovingLoadWorker";
-
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 
 export const GridListComponents = React.forwardRef((props, ref) => {
 	const [stldList, setStldList] = React.useState([]);
@@ -75,10 +74,12 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 
 	return (
 		<React.Fragment>
-			<Typography sx={{ my: 2 }}>Presetted Load Cases</Typography>
-			<div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-				<div style={{ display: "flex", flexDirection: "row"}}>
-					<mui.Grid item sx={{ height: "146px", width: "100%" }}>
+			<div style={{marginBottom: "10px"}} />
+			<Typography variant="body2">Presetted Load Cases</Typography>
+			<div style={{marginBottom: "14px"}} />
+			<div style={{ display: "flex", flexDirection: "column", width: "100%"}}>
+				<MoaGrid container display="flex" flexDirection="row">
+					<MoaGrid item xs={4}>
 						<ListComponent
 							label={"Static Load"}
 							Loader={STLD.DataLoader}
@@ -86,8 +87,8 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 							setCheckList={(l) => setStateUpdate(setStldList, l)}
 							{...updateKit}
 						/>
-					</mui.Grid>
-					<mui.Grid item sx={{ height: "146px", width: "100%" }}>
+					</MoaGrid>
+					<MoaGrid item xs={4}>
 						<ListComponent
 							label={"Construction Stage"}
 							Loader={CSCS.DataLoader}
@@ -95,8 +96,8 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 							setCheckList={(l) => setStateUpdate(setCscsList, l)}
 							{...updateKit}
 						/>
-					</mui.Grid>
-					<mui.Grid item sx={{ height: "146px", width: "100%" }}>
+					</MoaGrid>
+					<MoaGrid item xs={4}>
 						<ListComponent
 							label={"Moving Load"}
 							Loader={MVLD.DataLoader}
@@ -104,10 +105,10 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 							setCheckList={(l) => setStateUpdate(setMvldList, l)}
 							{...updateKit}
 						/>
-					</mui.Grid>
-				</div>
-				<div style={{ display: "flex", flexDirection: "row"}}>
-					<mui.Grid item sx={{ height: "146px", width: "100%" }}>
+					</MoaGrid>
+				</MoaGrid>
+				<MoaGrid container display="flex" flexDirection="row" width="100%">
+					<MoaGrid item xs={4}>
 						<ListComponent
 							label={"Settlement Load"}
 							Loader={SMLC.DataLoader}
@@ -115,8 +116,8 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 							setCheckList={(l) => setStateUpdate(setSmlcList, l)}
 							{...updateKit}
 						/>
-					</mui.Grid>
-					<mui.Grid item sx={{ height: "146px", width: "100%" }}>
+					</MoaGrid>
+					<MoaGrid item xs={4}>
 						<ListComponent
 							label={"Response Spectrum"}
 							Loader={SPLC.DataLoader}
@@ -124,8 +125,8 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 							setCheckList={(l) => setStateUpdate(setSplcList, l)}
 							{...updateKit}
 						/>
-					</mui.Grid>
-					<mui.Grid item sx={{ height: "146px", width: "100%" }}>
+					</MoaGrid>
+					<MoaGrid item xs={4}>
 						<ListComponent
 							label={"Time History"}
 							Loader={THIS.DataLoader}
@@ -133,11 +134,12 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 							setCheckList={(l) => setStateUpdate(setThisList, l)}
 							{...updateKit}
 						/>
-					</mui.Grid>
-				</div>
+					</MoaGrid>
+				</MoaGrid>
 			</div>
-			<br />
-			<Typography sx={{ my: 2 }}>Combined Load Cases</Typography>
+			<div style={{marginBottom: "14px"}} />
+			<Typography variant="body2">Combined Load Cases</Typography>
+			<div style={{marginBottom: "14px"}} />
 			<ListComponent
 				label={"Load Combinations"}
 				userData={{ user: additionalData.LCOM }}
@@ -146,24 +148,22 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 				setCheckList={(l) => setStateUpdate(setLcomList, l)}
 				{...updateKit}
 			/>
-			<div style={{display: "flex", flexDirection: "row", gap: "1rem", justifyContent: "center", alignItems: "center", width: "100%",}}>
+			<MoaStack direction="row" width="100%" justifyContent="right" marginY="10px">
 				<MoaButton
 					onClick={() => {
 						setDoUpdate("DESELECT");
 					}}
-					startIcon={<CheckBoxOutlineBlankIcon />}
 				>
-					DESELECT ALL
+					Deselect All
 				</MoaButton>
 				<MoaButton
 					onClick={() => {
 						setDoUpdate("SELECT");
 					}}
-					startIcon={<CheckBoxIcon />}
 				>
-					SELECT ALL
+					Select All
 				</MoaButton>
-			</div>
+			</MoaStack>
 		</React.Fragment>
 	);
 });

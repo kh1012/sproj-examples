@@ -2,16 +2,18 @@ import React from "react";
 import { Scrollbars } from "rc-scrollbars";
 import { updateCheckState } from "../utils";
 
-import Box from "@mui/material/Box";
 import Stack from "@midasit-dev/moaui/dist/Stack";
 import Checkbox from "@midasit-dev/moaui/dist/Check";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
+import MoaButton from "@midasit-dev/moaui/dist/Button";
 import Typography from "@midasit-dev/moaui/dist/Typography";
-import CircularProgress from "@mui/material/CircularProgress";
 import MoaTypography from "@midasit-dev/moaui/dist/Typography";
+// import Typography from "../Test/Typography/index.tsx";
+// import MoaTypography from "../Test/Typography/index.tsx";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const baseWidth = 6;
 const innerWidth = baseWidth + "rem";
@@ -28,13 +30,13 @@ const isEmpty = (array) => {
 }
 
 const ColoredContainer = (props) => (
-    <Box
+    <Stack
         display="flex"
         justifyContent="center"
         alignItems="center"
         sx={{height: '100%', backgroundColor: "#F5F4FF"}}>
         {props.children}
-    </Box>
+    </Stack>
 );
 
 const awaiter = async (setPending, setListData, func, userData) => {
@@ -81,19 +83,16 @@ export function ListComponent(props) {
     const handleOnClick = () => { updateCheckState(setCheckList, isFullyChecked ? [] : listData) };
 
     return (
-        <Box sx={{border: '1px solid #edf0f2', width: '100%'}}>
+        <Stack width="100%" border="1px solid #edf0f2">
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <ListItem
                     key={label}
                     disableGutters
                     disablePadding
-                    secondaryAction={
-                        isEmpty(listData) && (<Checkbox checked={isFullyChecked} onClick={handleOnClick} indeterminate={!isFullyChecked && checkList?.length !== 0} />)
-                    }
                 >
-                    <ListItemButton onClick={handleOnClick} sx={{height: "2rem"}}>
-                        <MoaTypography>{label}</MoaTypography>
-                    </ListItemButton>
+                    <div style={{paddingTop: "12px", paddingBottom: "6px", paddingLeft: "8px"}}>
+                        <Typography color="disable" variant="body2">{label}</Typography>
+                    </div>
                 </ListItem>
             </Stack>
             <div style={{height: innerWidth}}>
@@ -117,7 +116,9 @@ export function ListComponent(props) {
                                         disableGutters
                                         disablePadding
                                         secondaryAction={
-                                            <Checkbox checked={isExistInCheckList(value)} onClick={() => changeCheckedList(value)} />
+											<div style={{marginRight: "12px"}}>
+                                            	<Checkbox checked={isExistInCheckList(value)} onClick={() => changeCheckedList(value)} />
+											</div>
                                         }
                                         >
                                         <ListItemButton onClick={() => changeCheckedList(value)}>
@@ -130,6 +131,9 @@ export function ListComponent(props) {
                     </Scrollbars>
                 ) }
             </div>
-        </Box>
+			<Stack display="flex" justifyContent="center">
+				<MoaButton onClick={handleOnClick}>{!isFullyChecked ? "Select All" : "Clear All"}</MoaButton>
+			</Stack>
+        </Stack>
     );
 }
