@@ -55,6 +55,5 @@ export const DataLoader = async () => {
         registeredNames.push(targetData.LCNAME);
     };
 
-	console.log(registeredNames);
     return registeredNames;
 };
