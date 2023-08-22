@@ -69,7 +69,49 @@ DataLoader.defaultProps = {user: []};
 export const DataRawLoader = async ({user}) => {
     const path = "/db/";
     const dbPath = "LCOM";
-    const rawData = await loadData(path + dbPath);
+	const rawData = {
+		"LCOM": {
+			"1": {
+				"NAME": "cLCB1",
+				"KIND": "GEN",
+				"ACTIVE": "ACTIVE",
+				"bES": false,
+				"bCB": false,
+				"iTYPE": 0,
+				"DESC": "Load Combination 1",
+				"iSERV_TYPE": 0,
+				"nLCOMTYPE": 0,
+				"nSEISTYPE": 0,
+				"vCOMB": [
+					{
+						"ANAL": "ST",
+						"LCNAME": "USER",
+						"FACTOR": 1.4
+					}
+				]
+			},
+			"2": {
+				"NAME": "cLCB2",
+				"KIND": "GEN",
+				"ACTIVE": "INACTIVE",
+				"bES": false,
+				"bCB": false,
+				"iTYPE": 0,
+				"DESC": "Load Combination 2",
+				"iSERV_TYPE": 0,
+				"nLCOMTYPE": 0,
+				"nSEISTYPE": 0,
+				"vCOMB": [
+					{
+						"ANAL": "ST",
+						"LCNAME": "USER",
+						"FACTOR": 1
+					}
+				]
+			}
+		}
+	};
+    // const rawData = await loadData(path + dbPath);
     if (hasError(rawData)) return [];
     if (rawData[dbPath] === undefined) return [];
     
