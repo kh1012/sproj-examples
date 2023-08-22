@@ -487,7 +487,7 @@ function Main() {
 						<MoaStack direction="column" width={isPortrate? "100%" : "48%"}>
 							<Scrollbars
 								autoHide
-								autoHeightMax="584px"
+								autoHeightMax="330px"
 								autoHeight
 							>
 								<MoaDataGrid
@@ -514,11 +514,9 @@ function Main() {
 									getRowId={(row) => row.key}
 									density="compact"
 									disableColumnMenu
-									sx={{ width: "100%", height: "584px" }}
+									sx={{ width: "100%", height: "330px" }}
 									experimentalFeatures={{ newEditingApi: true }}
-									components={{
-										Pagination: CustomPagination,
-									}}
+									hideFooter
 								/>
 							</Scrollbars>
 							<MoaStack display="flex" flexDirection="row" justifyContent="center">
@@ -531,10 +529,11 @@ function Main() {
 							</MoaStack>
 						</MoaStack>
 						<MoaStack direction="column" width={isPortrate? "100%" : "48%"}>
-							<MoaStack direction="row" justifyContent="space-between" width="100%" paddingBottom={1}>
+							<MoaStack direction="row" width="100%" spacing={1} paddingBottom={1}>
 								<MoaTextField
 									id="NumberField"
 									title="No."
+									titlePosition="label"
 									variant="standard"
 									disabled
 									value={combNumber}
@@ -542,6 +541,7 @@ function Main() {
 								<MoaTextField
 									id="NameField"
 									title="Name"
+									titlePosition="label"
 									variant="standard"
 									value={combName}
 									disabled={combNameLocked}
@@ -585,7 +585,7 @@ function Main() {
 							<Scrollbars
 								autoHide
 								autoHeight
-								autoHeightMax={"512px"}
+								autoHeightMax={"257px"}
 								style={{ width: "100%" }}
 							>
 								<MoaDataGrid
@@ -594,12 +594,10 @@ function Main() {
 									getRowId={(row) => row.NAME}
 									density="compact"
 									disableColumnMenu
-									sx={{ minWidth: "40%", height: "512px" }}
+									sx={{ minWidth: "40%", height: "257px" }}
 									onCellEditStop={handleOnCellEditCommit}
 									experimentalFeatures={{ newEditingApi: true }}
-									components={{
-										Pagination: CustomPagination,
-									}}
+									hideFooter
 								/>
 							</Scrollbars>
 							<MoaStack display="flex" flexDirection="row" justifyContent="center">

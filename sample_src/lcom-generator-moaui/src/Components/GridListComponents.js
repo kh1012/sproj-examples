@@ -150,6 +150,7 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 			/>
 			<MoaStack direction="row" width="100%" justifyContent="right" marginY="10px">
 				<MoaButton
+					variant="text"
 					onClick={() => {
 						setDoUpdate("DESELECT");
 					}}
@@ -157,6 +158,7 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 					Deselect All
 				</MoaButton>
 				<MoaButton
+				 	variant="text"
 					onClick={() => {
 						setDoUpdate("SELECT");
 					}}

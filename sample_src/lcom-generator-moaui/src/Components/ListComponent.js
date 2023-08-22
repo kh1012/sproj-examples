@@ -132,7 +132,7 @@ export function ListComponent(props) {
                 ) }
             </div>
 			<Stack display="flex" justifyContent="center">
-				<MoaButton onClick={handleOnClick}>{!isFullyChecked ? "Select All" : "Clear All"}</MoaButton>
+				<MoaButton variant="text" onClick={handleOnClick}>{!isFullyChecked ? "Select All" : "Clear All"}</MoaButton>
 			</Stack>
         </Stack>
     );
