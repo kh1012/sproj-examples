@@ -383,7 +383,7 @@ function Main() {
 				valueOptions: typeValueOptions,
 				valueGetter: (params) =>
 					typeValueOptions.find((type) => type.value === params.row.iTYPE)
-						.label,
+						.value,
 			},
 			{
 				field: "DESC",
@@ -497,7 +497,7 @@ function Main() {
 												items: [
 													{
 														columnField: "KIND",
-														operatorValue: "equals",
+														operator: "equals",
 														value: "GEN",
 													},
 												],
