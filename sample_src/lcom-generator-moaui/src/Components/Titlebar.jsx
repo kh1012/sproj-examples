@@ -16,6 +16,8 @@ export default function TitleArea({title = "Search", leftArrow = false}) {
             <React.Fragment>
                 <Box height={`40px`} width="100%" alignItems="center" justifyContent="space-between" display="flex" sx={{backgroundColor: "#21272A"}}>
 					<Spacer />
+					<img src="./icon.svg" alt="icon" style={{width: '20px', height: '20px'}} />
+					<Spacer />
 					<span onMouseDown={requestDragStart} style={{width: '100%'}}>
 						<Typography color="third">{title}</Typography>
 					</span>
