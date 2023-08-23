@@ -148,23 +148,26 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 				setCheckList={(l) => setStateUpdate(setLcomList, l)}
 				{...updateKit}
 			/>
-			<MoaStack direction="row" width="100%" justifyContent="right" marginY="10px">
-				<MoaButton
-					variant="text"
-					onClick={() => {
-						setDoUpdate("DESELECT");
-					}}
-				>
-					Deselect All
-				</MoaButton>
-				<MoaButton
-				 	variant="text"
-					onClick={() => {
-						setDoUpdate("SELECT");
-					}}
-				>
-					Select All
-				</MoaButton>
+			<MoaStack direction="row" width="100%" justifyContent="space-between" alignItems="center" marginY="10px">
+				<MoaButton variant="text" onClick={() => setDataRequested(true)}>Add Items from List</MoaButton>
+				<MoaStack direction="row" justifyContent="right">
+					<MoaButton
+						variant="text"
+						onClick={() => {
+							setDoUpdate("DESELECT");
+						}}
+					>
+						Deselect All
+					</MoaButton>
+					<MoaButton
+						variant="text"
+						onClick={() => {
+							setDoUpdate("SELECT");
+						}}
+					>
+						Select All
+					</MoaButton>
+				</MoaStack>
 			</MoaStack>
 		</React.Fragment>
 	);

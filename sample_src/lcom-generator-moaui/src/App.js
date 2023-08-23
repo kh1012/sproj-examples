@@ -6,7 +6,7 @@ import MoaButton from "@midasit-dev/moaui/dist/Button";
 import MoaDroplist from "@midasit-dev/moaui/dist/DropList";
 import MoaStack from "@midasit-dev/moaui/dist/Stack";
 import MoaTextField from "@midasit-dev/moaui/dist/TextField";
-import MoaGrid from "@midasit-dev/moaui/dist/Grid";
+import MoaSeperator from "@midasit-dev/moaui/dist/Seperator";
 import MoaTypography from "@midasit-dev/moaui/dist/Typography";
 import MoaPanel from "@midasit-dev/moaui/dist/Panel";
 import * as mui from "@mui/material";
@@ -142,7 +142,7 @@ function Main() {
 
 	React.useEffect(() => {
 		if (!VerifyUtil.isExistQueryStrings('redirectTo') && !VerifyUtil.isExistQueryStrings('mapiKey')) {
-			setOpenFormDlg(true);
+			// setOpenFormDlg(true);
 		}
 	}, []);
 
@@ -464,7 +464,7 @@ function Main() {
 			{openFormDlg === true ? (
 				<FormDialog />
 			) : (
-				<MoaStack width="100%" maxWidth="712px">
+				<MoaStack width="100%" maxWidth="844px">
 					<MoaStack marginX={2}>
 						<GridListComponents
 							dataRequested={requestData}
@@ -474,20 +474,14 @@ function Main() {
 							ref={ref}
 						/>
 					</MoaStack>
-					<mui.Divider sx={{ my: 2 }} flexItem>
-						<mui.Button
-							variant="outlined"
-							onClick={() => setRequestData(true)}
-							startIcon={<AddIcon />}
-						>
-							Add Items from List
-						</mui.Button>
-					</mui.Divider>
+					<MoaStack marginBottom="10px" marginX="10px">
+						<MoaSeperator />
+					</MoaStack>
 					<MoaStack direction={isPortrate ? "column" : "row"} width="100%" spacing={1} justifyContent="center">
-						<MoaStack direction="column" width={isPortrate? "100%" : "48%"}>
+						<MoaStack direction="column" width={isPortrate? "100%" : "66%"}>
 							<Scrollbars
 								autoHide
-								autoHeightMax="330px"
+								autoHeightMax="343px"
 								autoHeight
 							>
 								<MoaDataGrid
@@ -514,21 +508,21 @@ function Main() {
 									getRowId={(row) => row.key}
 									density="compact"
 									disableColumnMenu
-									sx={{ width: "100%", height: "330px" }}
+									sx={{ width: "100%", height: "343px" }}
 									experimentalFeatures={{ newEditingApi: true }}
 									hideFooter
 								/>
 							</Scrollbars>
-							<MoaStack display="flex" flexDirection="row" justifyContent="center">
-								<MoaButton onClick={handleReflectDataIntoCivil}>
+							<MoaStack display="flex" flexDirection="row" justifyContent="right">
+								<MoaButton variant="text" onClick={handleReflectDataIntoCivil}>
 									Send data to civil
 								</MoaButton>
-								<MoaButton onClick={handleRefreshData}>
+								<MoaButton variant="text" onClick={handleRefreshData}>
 									Refresh All Data
 								</MoaButton>
 							</MoaStack>
 						</MoaStack>
-						<MoaStack direction="column" width={isPortrate? "100%" : "48%"}>
+						<MoaStack direction="column" width={isPortrate? "100%"  :"30%"}>
 							<MoaStack direction="row" width="100%" spacing={1} paddingBottom={1}>
 								<MoaTextField
 									id="NumberField"
@@ -600,9 +594,9 @@ function Main() {
 									hideFooter
 								/>
 							</Scrollbars>
-							<MoaStack display="flex" flexDirection="row" justifyContent="center">
-								<MoaButton onClick={handleNew}>New</MoaButton>
-								<MoaButton onClick={handleRegisterLcom}>Registration</MoaButton>
+							<MoaStack display="flex" flexDirection="row" justifyContent="right">
+								<MoaButton variant="text" onClick={handleNew}>New</MoaButton>
+								<MoaButton variant="text" onClick={handleRegisterLcom}>Registration</MoaButton>
 							</MoaStack>
 						</MoaStack>
 					</MoaStack>
