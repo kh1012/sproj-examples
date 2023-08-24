@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as mui from "@mui/material";
-import MoaButton from "@midasit-dev/moaui/dist/Button";
-import MoaGrid from "@midasit-dev/moaui/dist/Grid";
-import Typography from "@midasit-dev/moaui/dist/Typography";
-import MoaStack from "@midasit-dev/moaui/dist/Stack";
+import MoaButton from "@midasit-dev/moaui/Button";
+import MoaGrid from "@midasit-dev/moaui/Grid";
+import Typography from "@midasit-dev/moaui/Typography";
+import MoaStack from "@midasit-dev/moaui/Stack";
 import { ListComponent } from "./ListComponent";
 import { useSnackbar } from "notistack";
 import { makeObject, setStateUpdate } from "../utils";

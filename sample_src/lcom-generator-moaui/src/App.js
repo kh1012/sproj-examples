@@ -2,13 +2,13 @@
 import * as LCOM from "./Workers/LoadCombinationWorker";
 
 //library
-import MoaButton from "@midasit-dev/moaui/dist/Button";
-import MoaDroplist from "@midasit-dev/moaui/dist/DropList";
-import MoaStack from "@midasit-dev/moaui/dist/Stack";
-import MoaTextField from "@midasit-dev/moaui/dist/TextField";
-import MoaSeperator from "@midasit-dev/moaui/dist/Seperator";
-import MoaTypography from "@midasit-dev/moaui/dist/Typography";
-import MoaPanel from "@midasit-dev/moaui/dist/Panel";
+import MoaButton from "@midasit-dev/moaui/Button";
+import MoaDroplist from "@midasit-dev/moaui/DropList";
+import MoaStack from "@midasit-dev/moaui/Stack";
+import MoaTextField from "@midasit-dev/moaui/TextField";
+import MoaSeperator from "@midasit-dev/moaui/Seperator";
+import MoaTypography from "@midasit-dev/moaui/Typography";
+import MoaPanel from "@midasit-dev/moaui/Panel";
 import * as mui from "@mui/material";
 import * as React from "react";
 import Scrollbars from "rc-scrollbars";
@@ -21,7 +21,7 @@ import {
 import { VerifyUtil } from 'midas-components';
 
 //component
-import MoaDataGrid from "@midasit-dev/moaui/dist/DataGrid";
+import MoaDataGrid from "@midasit-dev/moaui/DataGrid";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { GridListComponents } from "./Components/GridListComponents";
 import { CustomPagination } from "./Components/CustomFooterComponent";

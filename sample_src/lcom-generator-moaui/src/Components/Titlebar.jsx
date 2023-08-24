@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import ClearIcon from "@mui/icons-material/Clear";
 import CardActionArea from "@mui/material/CardActionArea";
-import Typography from "@midasit-dev/moaui/dist/Typography";
+import Typography from "@midasit-dev/moaui/Typography";
 import { Divider } from "@mui/material";
 import { requestDragStart, requestHideDlg } from "./../Actions/ProductActions";
 
