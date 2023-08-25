@@ -149,7 +149,6 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 				{...updateKit}
 			/>
 			<MoaStack direction="row" width="100%" justifyContent="space-between" alignItems="center" marginY="10px">
-				<MoaButton variant="text" onClick={() => setDataRequested(true)}>Add Items from List</MoaButton>
 				<MoaStack direction="row" justifyContent="right">
 					<MoaButton
 						variant="text"
@@ -168,6 +167,7 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 						Select All
 					</MoaButton>
 				</MoaStack>
+				<MoaButton onClick={() => setDataRequested(true)}>Add Items from List</MoaButton>
 			</MoaStack>
 		</React.Fragment>
 	);
