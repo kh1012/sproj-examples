@@ -204,11 +204,11 @@ function Main() {
 	}, [radioOp]);
 
 	return (
-		<MoaPanel sx={{ flexGrow: 1 }}>
+		<MoaPanel>
 			<MoaGrid container spacing={1} paddingBottom={1}>
 				<MoaGrid item xs={8}>
 					<MoaPanel>
-						<MoaStack justifyContent="left">
+						<MoaStack margin="20px" justifyContent="left">
 							<MoaTypography variant="h1">Cubic Spline</MoaTypography>
 							{RadioButtonsGroup(radioOp, setRadioOp)}
 							<br />
@@ -225,24 +225,23 @@ function Main() {
 					</MoaPanel>
 				</MoaGrid>
 				<MoaGrid item xs={4}>
-					<MoaPanel variant="strock">
-						<MoaStack
-							spacing={1}
-							direction="column"
-							justifyContent="center"
-							alignItems="center"
-						>
-							<MoaButton variant="contained" width="100%" onClick={openHelpDialog}>
-								SPLINE
-							</MoaButton>
-							<MoaButton variant="contained" width="100%" onClick={openNodeDialog}>
-								IMPORT NODE
-							</MoaButton>
-							<MoaButton variant="contained" width="100%" onClick={LocalAxis}>
-								APPLY LOCAL AXIS
-							</MoaButton>
-						</MoaStack>
-					</MoaPanel>
+					<MoaStack
+						spacing={1}
+						direction="column"
+						justifyContent="center"
+						alignItems="center"
+						height="100%"
+					>
+						<MoaButton variant="contained" width="100%" onClick={openHelpDialog}>
+							SPLINE
+						</MoaButton>
+						<MoaButton variant="contained" width="100%" onClick={openNodeDialog}>
+							IMPORT NODE
+						</MoaButton>
+						<MoaButton variant="contained" width="100%" onClick={LocalAxis}>
+							APPLY LOCAL AXIS
+						</MoaButton>
+					</MoaStack>
 				</MoaGrid>
 			</MoaGrid>
 			<MoaPanel width="600px" height="350px">
