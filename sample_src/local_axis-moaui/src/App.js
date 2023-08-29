@@ -218,8 +218,8 @@ function Main() {
 								justifyContent="right"
 								alignItems="center"
 							>
-								<MoaTextField title="Start Point" placeholder={disText} value={startPt} onChange={(e) => setStartPt(e.target.value)} />
-								<MoaTextField title="End Point" placeholder={disText} value={endPt} onChange={(e) => setEndPt(e.target.value)} />
+								<MoaTextField title="Start Point" placeholder={disText + ""} value={startPt} onChange={(e) => setStartPt(e.target.value)} />
+								<MoaTextField title="End Point" placeholder={disText + ""} value={endPt} onChange={(e) => setEndPt(e.target.value)} />
 							</MoaStack>
 						</MoaStack>
 					</MoaPanel>
