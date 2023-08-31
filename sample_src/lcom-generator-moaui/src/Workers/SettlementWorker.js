@@ -3,7 +3,7 @@ import { DBVARIANT } from "./dictionary";
 
 export const DataLoader = async () => {
 	const DBNAME = DBVARIANT.SETTLEMENT;
-	const rawData = isDemo
+	const rawData = isDemo()
 		? {
 				SMLC: {
 					1: {

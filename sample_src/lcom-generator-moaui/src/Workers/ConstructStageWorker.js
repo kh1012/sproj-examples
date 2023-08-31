@@ -8,7 +8,7 @@ export const DataLoader = async () => {
 	const checkPathResult = await loadData(DBVARIANT.PATH + DBCODE);
 	if (hasError(checkPathResult)) return [];
 
-	const rawData = isDemo
+	const rawData = isDemo()
 		? {
 				STCT: {
 					1: {

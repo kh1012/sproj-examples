@@ -3,7 +3,7 @@ import { DBVARIANT } from "./dictionary";
 
 export const DataLoader = async () => {
 	const DBNAME = DBVARIANT.TIME_HISTORY;
-	const rawData = isDemo
+	const rawData = isDemo()
 		? {
 				THIS: {
 					1: {

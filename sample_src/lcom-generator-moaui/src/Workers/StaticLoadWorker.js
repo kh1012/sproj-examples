@@ -3,7 +3,7 @@ import { DBVARIANT } from "./dictionary";
 
 export const DataLoader = async () => {
 	const DBNAME = DBVARIANT.STATIC_LOAD;
-	const rawData = isDemo
+	const rawData = isDemo()
 		? {
 				STLD: {
 					1: {

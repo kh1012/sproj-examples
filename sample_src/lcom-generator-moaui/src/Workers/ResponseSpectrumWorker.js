@@ -3,7 +3,7 @@ import { DBVARIANT } from "./dictionary";
 
 export const DataLoader = async () => {
 	const DBNAME = DBVARIANT.RESPONSE_SPECTRUM;
-    const rawData = isDemo
+    const rawData = isDemo()
 			? {
 					SPLC: {
 						1: {

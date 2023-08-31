@@ -15,7 +15,7 @@ export const DataLoader = async () => {
 	const DBNAME = DBVARIANT.MOVING_LOAD;
 	const DBCODE = DBVARIANT.MOVING_LOAD_VARIANT;
 
-	const natlCodeData = isDemo
+	const natlCodeData = isDemo()
 		? {
 				MVCD: {
 					1: {
@@ -32,7 +32,7 @@ export const DataLoader = async () => {
 	if (NationalDefinitions[natlCode] !== undefined)
 		natlCodePostFix = NationalDefinitions[natlCode];
 
-	const rawData = isDemo
+	const rawData = isDemo()
 		? {
 				MVLD: {
 					1: {
