@@ -1,56 +1,57 @@
-import { loadData, hasError } from "../utils";
+import { loadData, hasError, isDemo } from "../utils";
+import { DBVARIANT } from "./dictionary";
 
 export const DataLoader = async ({user}) => {
-    // const path = "/db/";
-    const dbPath = "LCOM-GEN";
-	const rawData = {
-		"LCOM-GEN": {
-			"1": {
-				"NAME": "cLCB1",
-				"KIND": "GEN",
-				"ACTIVE": "ACTIVE",
-				"bES": false,
-				"bCB": false,
-				"iTYPE": 0,
-				"DESC": "Load Combination 1",
-				"iSERV_TYPE": 0,
-				"nLCOMTYPE": 0,
-				"nSEISTYPE": 0,
-				"vCOMB": [
-					{
-						"ANAL": "ST",
-						"LCNAME": "USER",
-						"FACTOR": 1.4
-					}
-				]
-			},
-			"2": {
-				"NAME": "cLCB2",
-				"KIND": "GEN",
-				"ACTIVE": "INACTIVE",
-				"bES": false,
-				"bCB": false,
-				"iTYPE": 0,
-				"DESC": "Load Combination 2",
-				"iSERV_TYPE": 0,
-				"nLCOMTYPE": 0,
-				"nSEISTYPE": 0,
-				"vCOMB": [
-					{
-						"ANAL": "ST",
-						"LCNAME": "USER",
-						"FACTOR": 1
-					}
-				]
-			}
-		}
-	};
-    // const rawData = await loadData(path + dbPath);
+	const DBNAME = DBVARIANT.LOAD_COMBINATION;
+    const rawData = isDemo
+			? {
+					"LCOM-GEN": {
+						1: {
+							NAME: "cLCB1",
+							KIND: "GEN",
+							ACTIVE: "ACTIVE",
+							bES: false,
+							bCB: false,
+							iTYPE: 0,
+							DESC: "Load Combination 1",
+							iSERV_TYPE: 0,
+							nLCOMTYPE: 0,
+							nSEISTYPE: 0,
+							vCOMB: [
+								{
+									ANAL: "ST",
+									LCNAME: "USER",
+									FACTOR: 1.4,
+								},
+							],
+						},
+						2: {
+							NAME: "cLCB2",
+							KIND: "GEN",
+							ACTIVE: "INACTIVE",
+							bES: false,
+							bCB: false,
+							iTYPE: 0,
+							DESC: "Load Combination 2",
+							iSERV_TYPE: 0,
+							nLCOMTYPE: 0,
+							nSEISTYPE: 0,
+							vCOMB: [
+								{
+									ANAL: "ST",
+									LCNAME: "USER",
+									FACTOR: 1,
+								},
+							],
+						},
+					},
+			  }
+			: await loadData(DBVARIANT.PATH + DBNAME);
     if (hasError(rawData)) return [];
-    if (rawData[dbPath] === undefined) return [];
+    if (rawData[DBNAME] === undefined) return [];
     
     let registeredItems = [];
-    const dbData = rawData[dbPath];
+    const dbData = rawData[DBNAME];
 
     for (const value in dbData) {
         const targetData = dbData[value];
@@ -67,56 +68,55 @@ export const DataLoader = async ({user}) => {
 DataLoader.defaultProps = {user: []};
 
 export const DataRawLoader = async ({user}) => {
-    const path = "/db/";
-    const dbPath = "LCOM";
-	const rawData = {
-		"LCOM": {
-			"1": {
-				"NAME": "cLCB1",
-				"KIND": "GEN",
-				"ACTIVE": "ACTIVE",
-				"bES": false,
-				"bCB": false,
-				"iTYPE": 0,
-				"DESC": "Load Combination 1",
-				"iSERV_TYPE": 0,
-				"nLCOMTYPE": 0,
-				"nSEISTYPE": 0,
-				"vCOMB": [
-					{
-						"ANAL": "ST",
-						"LCNAME": "USER",
-						"FACTOR": 1.4
-					}
-				]
-			},
-			"2": {
-				"NAME": "cLCB2",
-				"KIND": "GEN",
-				"ACTIVE": "INACTIVE",
-				"bES": false,
-				"bCB": false,
-				"iTYPE": 0,
-				"DESC": "Load Combination 2",
-				"iSERV_TYPE": 0,
-				"nLCOMTYPE": 0,
-				"nSEISTYPE": 0,
-				"vCOMB": [
-					{
-						"ANAL": "ST",
-						"LCNAME": "USER",
-						"FACTOR": 1
-					}
-				]
-			}
-		}
-	};
-    // const rawData = await loadData(path + dbPath);
+	const DBNAME = DBVARIANT.LOAD_COMBINATION;
+	// const rawData = {
+	// 	"LCOM": {
+	// 		"1": {
+	// 			"NAME": "cLCB1",
+	// 			"KIND": "GEN",
+	// 			"ACTIVE": "ACTIVE",
+	// 			"bES": false,
+	// 			"bCB": false,
+	// 			"iTYPE": 0,
+	// 			"DESC": "Load Combination 1",
+	// 			"iSERV_TYPE": 0,
+	// 			"nLCOMTYPE": 0,
+	// 			"nSEISTYPE": 0,
+	// 			"vCOMB": [
+	// 				{
+	// 					"ANAL": "ST",
+	// 					"LCNAME": "USER",
+	// 					"FACTOR": 1.4
+	// 				}
+	// 			]
+	// 		},
+	// 		"2": {
+	// 			"NAME": "cLCB2",
+	// 			"KIND": "GEN",
+	// 			"ACTIVE": "INACTIVE",
+	// 			"bES": false,
+	// 			"bCB": false,
+	// 			"iTYPE": 0,
+	// 			"DESC": "Load Combination 2",
+	// 			"iSERV_TYPE": 0,
+	// 			"nLCOMTYPE": 0,
+	// 			"nSEISTYPE": 0,
+	// 			"vCOMB": [
+	// 				{
+	// 					"ANAL": "ST",
+	// 					"LCNAME": "USER",
+	// 					"FACTOR": 1
+	// 				}
+	// 			]
+	// 		}
+	// 	}
+	// };
+    const rawData = await loadData(DBVARIANT.PATH + DBNAME);
     if (hasError(rawData)) return [];
-    if (rawData[dbPath] === undefined) return [];
+    if (rawData[DBNAME] === undefined) return [];
     
     let registeredItems = [];
-    const dbData = rawData[dbPath];
+    const dbData = rawData[DBNAME];
 
     for (const value in dbData) {
         const targetData = dbData[value];

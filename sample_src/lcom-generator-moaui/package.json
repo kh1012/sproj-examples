@@ -23,7 +23,8 @@
   "scripts": {
     "start": "react-scripts start",
     "start-secure": "env-cmd -f ./src/.env.secure.development react-scripts start",
-    "build": "react-scripts build"
+    "build": "env-cmd -f ./src/.env.production react-scripts build",
+    "build-demo": "env-cmd -f ./src/.env.demo.production react-scripts build"
   },
   "eslintConfig": {
     "extends": [

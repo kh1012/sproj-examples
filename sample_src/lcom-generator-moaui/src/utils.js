@@ -96,3 +96,7 @@ export const processToken = ({name, token = "_", defaultValue = "0001"}) => {
   } 
   return name + token + defaultValue;
 };
+
+export const isDemo = () => {
+	return process.env.DEMO === "true";
+}
