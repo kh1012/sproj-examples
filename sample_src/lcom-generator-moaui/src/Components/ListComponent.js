@@ -17,12 +17,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 const baseWidth = 6;
 const innerWidth = baseWidth + "rem";
-const outerWidth = (baseWidth + 5) + "rem";
 
 ListComponent.defaultProps = {
     checkList: [],
     loader: () => {},
     userData: {user: []},
+	width: "100%",
 };
 
 const isEmpty = (array) => {
@@ -48,7 +48,7 @@ const awaiter = async (setPending, setListData, func, userData) => {
 };
 
 export function ListComponent(props) {
-    const {checkList, setCheckList, doUpdate, setDoUpdate, Loader, label, userData} = props;
+    const {checkList, setCheckList, doUpdate, setDoUpdate, Loader, label, userData, width} = props;
     const [listData, setListData] = React.useState([]);
     const [isPending, setPending] = React.useState(false);
 
@@ -83,7 +83,7 @@ export function ListComponent(props) {
     const handleOnClick = () => { updateCheckState(setCheckList, isFullyChecked ? [] : listData) };
 
     return (
-        <Stack width="100%" border="1px solid #edf0f2">
+        <Stack width={width} border="1px solid #edf0f2">
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <ListItem
                     key={label}
