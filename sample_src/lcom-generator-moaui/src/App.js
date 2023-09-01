@@ -465,15 +465,13 @@ function Main() {
 				<FormDialog />
 			) : (
 				<MoaStack width="100%" maxWidth="844px">
-					<MoaStack marginX={2}>
-						<GridListComponents
-							dataRequested={requestData}
-							setDataRequested={setRequestData}
-							updateCombData={appendCombData}
-							additionalData={{ LCOM: userLcomList }}
-							ref={ref}
-						/>
-					</MoaStack>
+					<GridListComponents
+						dataRequested={requestData}
+						setDataRequested={setRequestData}
+						updateCombData={appendCombData}
+						additionalData={{ LCOM: userLcomList }}
+						ref={ref}
+					/>
 					<MoaStack marginBottom="10px" marginX="10px">
 						<MoaSeperator />
 					</MoaStack>
