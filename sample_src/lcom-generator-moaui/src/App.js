@@ -8,7 +8,6 @@ import MoaStack from "@midasit-dev/moaui/Stack";
 import MoaTextField from "@midasit-dev/moaui/TextField";
 import MoaSeperator from "@midasit-dev/moaui/Seperator";
 import MoaTypography from "@midasit-dev/moaui/Typography";
-import MoaPanel from "@midasit-dev/moaui/Panel";
 import * as mui from "@mui/material";
 import * as React from "react";
 import Scrollbars from "rc-scrollbars";
@@ -24,14 +23,9 @@ import { VerifyUtil } from 'midas-components';
 import MoaDataGrid from "@midasit-dev/moaui/DataGrid";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { GridListComponents } from "./Components/GridListComponents";
-import { CustomPagination } from "./Components/CustomFooterComponent";
 
 //icon
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import AddIcon from "@mui/icons-material/Add";
-
 
 const typeValueOptions = [
 	{ value: 0, label: "Add" },
@@ -198,29 +192,29 @@ function Main() {
 		setCombValue(combValue);
 	}, []);
 
-	const handleCopy = React.useCallback(
-		(params) => {
-			let combValue = { data: [] };
+	// const handleCopy = React.useCallback(
+	// 	(params) => {
+	// 		let combValue = { data: [] };
 
-			try {
-				const vCombData = params.row.vCOMB;
-				combValue.data = vCombData.map((value) => makeCombData(value));
+	// 		try {
+	// 			const vCombData = params.row.vCOMB;
+	// 			combValue.data = vCombData.map((value) => makeCombData(value));
 
-				const rawName = params.row.NAME;
-				let newCombName = processToken({ name: rawName });
+	// 			const rawName = params.row.NAME;
+	// 			let newCombName = processToken({ name: rawName });
 
-				combValue.name = newCombName;
-				combValue.type = params.row.iTYPE;
-				combValue.number = lcomList.length + 1;
-				combValue.active = params.row.ACTIVE;
-			} catch (_) {
-				console.log(_);
-			}
+	// 			combValue.name = newCombName;
+	// 			combValue.type = params.row.iTYPE;
+	// 			combValue.number = lcomList.length + 1;
+	// 			combValue.active = params.row.ACTIVE;
+	// 		} catch (_) {
+	// 			console.log(_);
+	// 		}
 
-			setCombValue(combValue);
-		},
-		[lcomList.length, setCombValue]
-	);
+	// 		setCombValue(combValue);
+	// 	},
+	// 	[lcomList.length, setCombValue]
+	// );
 
 	const handleRemove = React.useCallback(
 		(params) => {

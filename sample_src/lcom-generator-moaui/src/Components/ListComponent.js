@@ -7,7 +7,6 @@ import Checkbox from "@midasit-dev/moaui/Check";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
-import ListItemText from "@mui/material/ListItemText";
 import MoaButton from "@midasit-dev/moaui/Button";
 import Typography from "@midasit-dev/moaui/Typography";
 import MoaTypography from "@midasit-dev/moaui/Typography";
