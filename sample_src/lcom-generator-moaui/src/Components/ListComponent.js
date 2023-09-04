@@ -22,6 +22,7 @@ ListComponent.defaultProps = {
     loader: () => {},
     userData: {user: []},
 	width: "100%",
+	height: innerWidth,
 };
 
 const isEmpty = (array) => {
@@ -94,7 +95,7 @@ export function ListComponent(props) {
                     </div>
                 </ListItem>
             </Stack>
-            <div style={{height: innerWidth}}>
+            <div style={{height: props?.height}}>
                 {isPending && (
                     <ColoredContainer>
                         <CircularProgress />
@@ -106,8 +107,8 @@ export function ListComponent(props) {
                     </ColoredContainer>
                 )}
                 {!isPending && isEmpty(listData) && (
-                    <Scrollbars autoHeight autoHeightMax={innerWidth} autoHeightMin={innerWidth} autoHide>
-                        <List sx={{height: innerWidth}}>
+                    <Scrollbars autoHeight autoHeightMax={props?.height} autoHeightMin={props?.height} autoHide>
+                        <List sx={{height: props?.height}}>
                             {
                                 listData.map((value) => (
                                     <ListItem

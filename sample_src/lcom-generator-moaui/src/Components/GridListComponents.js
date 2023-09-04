@@ -140,6 +140,7 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 					<div style={{marginBottom: "14px"}} />
 					<ListComponent
 						width="100%"
+						height="16rem"
 						label={"Load Combinations"}
 						userData={{ user: additionalData.LCOM }}
 						Loader={LCOM.DataLoader}
@@ -150,9 +151,8 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 				</MoaStack>
 			</MoaStack>
 			<MoaStack direction="row" width="100%" justifyContent="space-between" alignItems="center" marginY="10px">
-				<MoaStack direction="row" justifyContent="right">
+				<MoaStack direction="row" justifyContent="right" spacing={2}>
 					<MoaButton
-						variant="text"
 						onClick={() => {
 							setDoUpdate("DESELECT");
 						}}
@@ -160,7 +160,6 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 						Deselect All
 					</MoaButton>
 					<MoaButton
-						variant="text"
 						onClick={() => {
 							setDoUpdate("SELECT");
 						}}
@@ -168,7 +167,7 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 						Select All
 					</MoaButton>
 				</MoaStack>
-				<MoaButton onClick={() => setDataRequested(true)}>Add Items from List</MoaButton>
+				<MoaButton onClick={() => setDataRequested(true)}>ADD CHECKED ITEM TO LIST</MoaButton>
 			</MoaStack>
 		</React.Fragment>
 	);

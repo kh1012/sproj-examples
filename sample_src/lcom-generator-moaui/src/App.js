@@ -126,17 +126,22 @@ function Main() {
 	const [combNumber, setCombNumber] = React.useState(defaultCombValues.number);
 	const [openFormDlg, setOpenFormDlg] = React.useState(false);
 
+	const [isModifyMode, setModifyMode] = React.useState(false);
+	const [isLcomLoading, setLcomLoading] = React.useState(false);
+
 	const isPortrate = mui.useMediaQuery('(orientation: portrait)');
 
 	const loadLcom = React.useCallback(async () => {
+		setLcomLoading(true);
 		const result = await LCOM.DataRawLoader({ user: userLcomList });
+		setLcomLoading(false);
 		if (!result) return;
 		setLcomList(result);
 	}, [userLcomList]);
 
 	React.useEffect(() => {
 		if (!VerifyUtil.isExistQueryStrings('redirectTo') && !VerifyUtil.isExistQueryStrings('mapiKey')) {
-			// setOpenFormDlg(true);
+			setOpenFormDlg(true);
 		}
 	}, []);
 
@@ -189,6 +194,7 @@ function Main() {
 			console.log(_);
 		}
 
+		setModifyMode(true);
 		setCombValue(combValue);
 	}, []);
 
@@ -233,22 +239,24 @@ function Main() {
 
 	const initializeCombInput = React.useCallback(() => {
 		setCombValue(defaultCombValues);
-	}, []);
+		setModifyMode(true);
+	}, [setCombValue]);
 
 	const refreshLocalComponent = React.useCallback(() => {
-		// ref.current.init();
+		ref.current.init();
 		loadLcom();
 		initializeCombInput();
 	}, [initializeCombInput, loadLcom]);
 
 	const handleNew = React.useCallback(() => {
 		refreshLocalComponent();
+		setModifyMode(false);
 		setCombNumber(defaultCombValues.number);
 	}, [refreshLocalComponent]);
 
 	const handleRefreshData = React.useCallback(() => {
 		setUserLcomList([]);
-		// ref.current.init();
+		ref.current.init();
 		initializeCombInput();
 	}, [initializeCombInput]);
 
@@ -386,23 +394,13 @@ function Main() {
 				sortable: false,
 			},
 			{
-				field: "Actions",
-				headerName: "Actions",
+				field: "Delete",
+				headerName: "Delete",
 				type: "actions",
 				editable: false,
 				sortable: false,
-				flex: 1,
+				flex: 0.5,
 				getActions: (params) => [
-					<GridActionsCellItem
-						icon={<EditIcon />}
-						label="Edit"
-						onClick={() => handleEdit(params)}
-					/>,
-					<GridActionsCellItem
-						icon={<ContentCopyIcon />}
-						label="Copy"
-						onClick={() => handleCopy(params)}
-					/>,
 					<GridActionsCellItem
 						icon={<DeleteIcon />}
 						label="Remove"
@@ -411,7 +409,7 @@ function Main() {
 				],
 			},
 		],
-		[handleCopy, handleEdit, handleRemove, numberPadLeft]
+		[handleEdit, handleRemove, numberPadLeft]
 	);
 
 	const AllGridDef = React.useMemo(
@@ -477,6 +475,10 @@ function Main() {
 								autoHeight
 							>
 								<MoaDataGrid
+									onCellClick={(params) => {
+										if (params.field === "Delete") return;
+										handleEdit(params);
+									}}
 									initialState={{
 										filter: {
 											filterModel: {
@@ -495,6 +497,7 @@ function Main() {
 											},
 										},
 									}}
+									loading={isLcomLoading}
 									rows={lcomList}
 									columns={LcomListGridDef}
 									getRowId={(row) => row.key}
@@ -505,12 +508,12 @@ function Main() {
 									hideFooter
 								/>
 							</Scrollbars>
-							<MoaStack display="flex" flexDirection="row" justifyContent="right">
-								<MoaButton variant="text" onClick={handleReflectDataIntoCivil}>
-									Send data to civil
+							<MoaStack direction="row" justifyContent="center" marginTop={1} spacing={1}>
+								<MoaButton onClick={handleRefreshData}>
+									CALL DATA FROM MIDAS
 								</MoaButton>
-								<MoaButton variant="text" onClick={handleRefreshData}>
-									Refresh All Data
+								<MoaButton onClick={handleReflectDataIntoCivil}>
+									SEND DATA TO MIDAS
 								</MoaButton>
 							</MoaStack>
 						</MoaStack>
@@ -586,9 +589,11 @@ function Main() {
 									hideFooter
 								/>
 							</Scrollbars>
-							<MoaStack display="flex" flexDirection="row" justifyContent="right">
-								<MoaButton variant="text" onClick={handleNew}>New</MoaButton>
-								<MoaButton variant="text" onClick={handleRegisterLcom}>Registration</MoaButton>
+							<MoaStack direction="row" justifyContent="right" spacing={1} marginTop={1}>
+								<MoaButton onClick={handleRegisterLcom}>
+									{isModifyMode ? "MODIFY" : "ADD"}
+								</MoaButton>
+								<MoaButton onClick={handleNew}>NEW LIST</MoaButton>
 							</MoaStack>
 						</MoaStack>
 					</MoaStack>
