@@ -127,14 +127,13 @@ export const DataRawLoader = async ({user}) => {
     if (user.length > 0) {
         for (const value of user) {
             const findResult = registeredItems.findIndex((registeredItem) => (registeredItem.key === value.key));
-            if (findResult === -1)
-                registeredItems.push(value);
-            else {
-                if (value.markAsRemoved)
-                    registeredItems.splice(findResult, 1);
-                else
-                    registeredItems[findResult] = value;
-            }
+			if (findResult === -1) {
+				if (value.markAsRemoved) continue;
+				else registeredItems.push(value);
+			} else {
+				if (value.markAsRemoved) registeredItems.splice(findResult, 1);
+				else registeredItems[findResult] = value;
+			}
         }
     }
     
