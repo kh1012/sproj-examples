@@ -64,6 +64,9 @@ export const GridListComponents = React.forwardRef((props, ref) => {
 
 	const init = () => {
 		setDoUpdate("INIT");
+		setTimeout(() => {
+			setDoUpdate("");
+		}, 200);
 	};
 
 	React.useImperativeHandle(ref, () => ({ init }));
