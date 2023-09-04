@@ -10,8 +10,6 @@ import List from "@mui/material/List";
 import MoaButton from "@midasit-dev/moaui/Button";
 import Typography from "@midasit-dev/moaui/Typography";
 import MoaTypography from "@midasit-dev/moaui/Typography";
-// import Typography from "../Test/Typography/index.tsx";
-// import MoaTypography from "../Test/Typography/index.tsx";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const baseWidth = 6;
