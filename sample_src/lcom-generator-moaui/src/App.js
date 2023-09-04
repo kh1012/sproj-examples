@@ -464,11 +464,11 @@ function Main() {
 						additionalData={{ LCOM: userLcomList }}
 						ref={ref}
 					/>
-					<MoaStack marginBottom="10px" marginX="10px">
+					<MoaStack marginBottom="10px">
 						<MoaSeperator />
 					</MoaStack>
 					<MoaStack direction={isPortrate ? "column" : "row"} width="100%" spacing={1} justifyContent="center">
-						<MoaStack direction="column" width={isPortrate? "100%" : "66%"}>
+						<MoaStack direction="column" width={isPortrate? "100%" : "70%"}>
 							<Scrollbars
 								autoHide
 								autoHeightMax="343px"
