@@ -54,14 +54,14 @@ export const DataLoader = async ({user}) => {
     const dbData = rawData[DBNAME];
 
     for (const value in dbData) {
-        const targetData = dbData[value];
+		const targetData = dbData[value];
         const findResult = user.findIndex((value) => (value.NAME === targetData.NAME));
         if (findResult === -1)
-            registeredItems.push(targetData);
-        else if (!user[findResult].markAsRemoved)
-            registeredItems.push(user[findResult]);
-    }
-        
+			registeredItems.push(targetData);
+		else if (!user[findResult].markAsRemoved)
+			registeredItems.push(user[findResult]);
+	}
+
     return registeredItems.map((value) => (value.NAME));
 };
 
@@ -121,7 +121,7 @@ export const DataRawLoader = async ({user}) => {
 
     for (const value in dbData) {
         const targetData = dbData[value];
-        registeredItems.push({key: value, ...targetData});
+        registeredItems.push({key: value, ...targetData, isPending: true});
     }
 
     if (user.length > 0) {

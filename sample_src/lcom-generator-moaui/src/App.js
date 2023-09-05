@@ -21,7 +21,7 @@ import { VerifyUtil } from 'midas-components';
 
 //component
 import MoaDataGrid from "@midasit-dev/moaui/DataGrid";
-import { GridActionsCellItem } from "@mui/x-data-grid";
+import { GridActionsCellItem, useGridApiRef } from "@mui/x-data-grid";
 import { GridListComponents } from "./Components/GridListComponents";
 
 //icon
@@ -110,6 +110,7 @@ function App() {
 function Main() {
 	const ref = React.useRef({});
 	const { enqueueSnackbar } = useSnackbar();
+	const gridRef = useGridApiRef();
 
 	const [lcomList, setLcomList] = React.useState([]);
 	const [userLcomList, setUserLcomList] = React.useState([]);
@@ -246,7 +247,9 @@ function Main() {
 		ref.current.init();
 		loadLcom();
 		initializeCombInput();
-	}, [initializeCombInput, loadLcom]);
+		setModifyMode(false);
+		gridRef.current.selectRow(-1, false, true);
+	}, [gridRef, initializeCombInput, loadLcom]);
 
 	const handleNew = React.useCallback(() => {
 		refreshLocalComponent();
@@ -270,6 +273,11 @@ function Main() {
 
 		const newUserLcomList = [...userLcomList];
 
+		if (!isModifyMode && newUserLcomList.find((value) => value.NAME === combName)) {
+			enqueueSnackbar(`"${combName}" already exists.`, { variant: "error" });
+			return;
+		}
+
 		let userLcomListItem = {
 			key: String(combNumber),
 			NAME: combName,
@@ -292,16 +300,9 @@ function Main() {
 		newUserLcomList.push(userLcomListItem);
 		setUserLcomList(newUserLcomList);
 		refreshLocalComponent();
-	}, [
-		combActive,
-		combData,
-		combName,
-		combNumber,
-		combType,
-		enqueueSnackbar,
-		refreshLocalComponent,
-		userLcomList,
-	]);
+
+		enqueueSnackbar(`"${combName}" is added.`, { variant: "success" });
+	}, [combActive, combData, combName, combNumber, combType, enqueueSnackbar, isModifyMode, refreshLocalComponent, userLcomList]);
 
 	const appendCombData = React.useCallback(
 		(items) => {
@@ -359,7 +360,7 @@ function Main() {
 				field: "key",
 				headerName: "No.",
 				editable: false,
-				valueFormatter: ({ value }) => value.padStart(numberPadLeft, "0"),
+				valueGetter: (params) => `${params.row.key}${!params.row.isPending ? "*" : ""}`,
 				flex: 0.1,
 			},
 			{
@@ -452,7 +453,7 @@ function Main() {
 	);
 
 	return (
-		<div style={{width:"100%", display: "flex", justifyContent: "center"}}>
+		<div style={{width:"100%", display: "flex", justifyContent: "center", backgroundColor: "white"}}>
 			{openFormDlg === true ? (
 				<FormDialog />
 			) : (
@@ -475,6 +476,7 @@ function Main() {
 								autoHeight
 							>
 								<MoaDataGrid
+									apiRef={gridRef}
 									onCellClick={(params) => {
 										if (params.field === "Delete") return;
 										handleEdit(params);
@@ -593,7 +595,7 @@ function Main() {
 								<MoaButton onClick={handleRegisterLcom}>
 									{isModifyMode ? "MODIFY" : "ADD"}
 								</MoaButton>
-								<MoaButton onClick={handleNew}>NEW LIST</MoaButton>
+								<MoaButton onClick={handleNew}>CLEAR</MoaButton>
 							</MoaStack>
 						</MoaStack>
 					</MoaStack>
