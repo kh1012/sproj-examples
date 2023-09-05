@@ -7,22 +7,20 @@ import Checkbox from "@midasit-dev/moaui/Check";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
-import ListItemText from "@mui/material/ListItemText";
 import MoaButton from "@midasit-dev/moaui/Button";
 import Typography from "@midasit-dev/moaui/Typography";
 import MoaTypography from "@midasit-dev/moaui/Typography";
-// import Typography from "../Test/Typography/index.tsx";
-// import MoaTypography from "../Test/Typography/index.tsx";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const baseWidth = 6;
 const innerWidth = baseWidth + "rem";
-const outerWidth = (baseWidth + 5) + "rem";
 
 ListComponent.defaultProps = {
     checkList: [],
     loader: () => {},
     userData: {user: []},
+	width: "100%",
+	height: innerWidth,
 };
 
 const isEmpty = (array) => {
@@ -48,7 +46,7 @@ const awaiter = async (setPending, setListData, func, userData) => {
 };
 
 export function ListComponent(props) {
-    const {checkList, setCheckList, doUpdate, setDoUpdate, Loader, label, userData} = props;
+    const {checkList, setCheckList, doUpdate, setDoUpdate, Loader, label, userData, width} = props;
     const [listData, setListData] = React.useState([]);
     const [isPending, setPending] = React.useState(false);
 
@@ -83,7 +81,7 @@ export function ListComponent(props) {
     const handleOnClick = () => { updateCheckState(setCheckList, isFullyChecked ? [] : listData) };
 
     return (
-        <Stack width="100%" border="1px solid #edf0f2">
+        <Stack width={width} border="1px solid #edf0f2">
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <ListItem
                     key={label}
@@ -95,7 +93,7 @@ export function ListComponent(props) {
                     </div>
                 </ListItem>
             </Stack>
-            <div style={{height: innerWidth}}>
+            <div style={{height: props?.height}}>
                 {isPending && (
                     <ColoredContainer>
                         <CircularProgress />
@@ -107,8 +105,8 @@ export function ListComponent(props) {
                     </ColoredContainer>
                 )}
                 {!isPending && isEmpty(listData) && (
-                    <Scrollbars autoHeight autoHeightMax={innerWidth} autoHeightMin={innerWidth} autoHide>
-                        <List sx={{height: innerWidth}}>
+                    <Scrollbars autoHeight autoHeightMax={props?.height} autoHeightMin={props?.height} autoHide>
+                        <List sx={{height: props?.height}}>
                             {
                                 listData.map((value) => (
                                     <ListItem

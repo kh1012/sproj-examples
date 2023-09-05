@@ -1,32 +1,33 @@
-import { hasError, loadData } from "../utils";
+import { hasError, loadData, isDemo } from "../utils";
+import { DBVARIANT } from "./dictionary";
 
 export const DataLoader = async () => {
-    // const path = "/db/";
-    const dbPath = "THIS";
-    // const rawData = await loadData(path + dbPath);
-	const rawData = {
-		"THIS": {
-			"1": {
-				"COMMON": {
-					"NAME": "Time History 1",
+	const DBNAME = DBVARIANT.TIME_HISTORY;
+	const rawData = isDemo()
+		? {
+				THIS: {
+					1: {
+						COMMON: {
+							NAME: "Time History 1",
+						},
+					},
+					2: {
+						COMMON: {
+							NAME: "Time History 2",
+						},
+					},
 				},
-			},
-			"2": {
-				"COMMON": {
-					"NAME": "Time History 2",
-				},
-			},
-		}
-	};
-    if (hasError(rawData)) return [];
-    if (rawData[dbPath] === undefined) return [];
-    
-    let registeredNames = [];
-    const dbData = rawData[dbPath];
-    for (const value in dbData) {
-        const targetData = dbData[value]["COMMON"];
-        registeredNames.push(targetData.NAME);
-    };
+		  }
+		: await loadData(DBVARIANT.PATH + DBNAME);
+	if (hasError(rawData)) return [];
+	if (rawData[DBNAME] === undefined) return [];
 
-    return registeredNames;
+	let registeredNames = [];
+	const dbData = rawData[DBNAME];
+	for (const value in dbData) {
+		const targetData = dbData[value]["COMMON"];
+		registeredNames.push(targetData.NAME);
+	}
+
+	return registeredNames;
 };

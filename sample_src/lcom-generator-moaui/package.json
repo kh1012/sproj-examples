@@ -6,7 +6,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@midasit-dev/moaui": "^0.0.26",
+    "@midasit-dev/moaui": "^0.0.28",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.8",
     "@mui/x-data-grid": "^6.11.2",
@@ -23,7 +23,8 @@
   "scripts": {
     "start": "react-scripts start",
     "start-secure": "env-cmd -f ./src/.env.secure.development react-scripts start",
-    "build": "react-scripts build"
+    "build": "env-cmd -f ./src/.env.production react-scripts build",
+    "build-demo": "env-cmd -f ./src/.env.demo.production react-scripts build"
   },
   "eslintConfig": {
     "extends": [
