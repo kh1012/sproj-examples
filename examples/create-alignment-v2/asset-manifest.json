@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.7693df36.css",
-    "main.js": "/static/js/main.3405488b.js",
-    "static/js/787.0e8a5d17.chunk.js": "/static/js/787.0e8a5d17.chunk.js",
-    "static/media/AlignHelp.svg": "/static/media/AlignHelp.20cf72c2f29211ea95b05ac1fc3f8640.svg",
-    "static/media/SegmHelp.svg": "/static/media/SegmHelp.3114d65649a24be7823630aeb39931f1.svg",
-    "index.html": "/index.html",
-    "main.7693df36.css.map": "/static/css/main.7693df36.css.map",
-    "main.3405488b.js.map": "/static/js/main.3405488b.js.map",
-    "787.0e8a5d17.chunk.js.map": "/static/js/787.0e8a5d17.chunk.js.map"
+    "main.css": "./static/css/main.7693df36.css",
+    "main.js": "./static/js/main.e774016a.js",
+    "static/js/787.0e8a5d17.chunk.js": "./static/js/787.0e8a5d17.chunk.js",
+    "static/media/AlignHelp.svg": "./static/media/AlignHelp.20cf72c2f29211ea95b05ac1fc3f8640.svg",
+    "static/media/SegmHelp.svg": "./static/media/SegmHelp.3114d65649a24be7823630aeb39931f1.svg",
+    "index.html": "./index.html",
+    "main.7693df36.css.map": "./static/css/main.7693df36.css.map",
+    "main.e774016a.js.map": "./static/js/main.e774016a.js.map",
+    "787.0e8a5d17.chunk.js.map": "./static/js/787.0e8a5d17.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7693df36.css",
-    "static/js/main.3405488b.js"
+    "static/js/main.e774016a.js"
   ]
 }
