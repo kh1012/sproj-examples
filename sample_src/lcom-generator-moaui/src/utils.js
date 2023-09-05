@@ -56,7 +56,7 @@ export const sendData = async (targetUrl, body, method = "PUT") => {
     };
 
     try {
-      const res = await fetch((await VerifyUtil.getBaseUrlAsync())  + "/civil" + targetUrl, opts);
+      const res = await fetch((await VerifyUtil.getBaseUrlAsync()) + targetUrl, opts);
       const json = await res.json();
       return json;
     } catch (_) {
@@ -96,3 +96,7 @@ export const processToken = ({name, token = "_", defaultValue = "0001"}) => {
   } 
   return name + token + defaultValue;
 };
+
+export const isDemo = () => {
+	return process.env.DEMO === "true";
+}

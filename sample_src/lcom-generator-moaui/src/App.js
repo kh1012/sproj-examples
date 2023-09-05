@@ -8,7 +8,6 @@ import MoaStack from "@midasit-dev/moaui/Stack";
 import MoaTextField from "@midasit-dev/moaui/TextField";
 import MoaSeperator from "@midasit-dev/moaui/Seperator";
 import MoaTypography from "@midasit-dev/moaui/Typography";
-import MoaPanel from "@midasit-dev/moaui/Panel";
 import * as mui from "@mui/material";
 import * as React from "react";
 import Scrollbars from "rc-scrollbars";
@@ -22,16 +21,11 @@ import { VerifyUtil } from 'midas-components';
 
 //component
 import MoaDataGrid from "@midasit-dev/moaui/DataGrid";
-import { GridActionsCellItem } from "@mui/x-data-grid";
+import { GridActionsCellItem, useGridApiRef } from "@mui/x-data-grid";
 import { GridListComponents } from "./Components/GridListComponents";
-import { CustomPagination } from "./Components/CustomFooterComponent";
 
 //icon
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import AddIcon from "@mui/icons-material/Add";
-
 
 const typeValueOptions = [
 	{ value: 0, label: "Add" },
@@ -116,6 +110,7 @@ function App() {
 function Main() {
 	const ref = React.useRef({});
 	const { enqueueSnackbar } = useSnackbar();
+	const gridRef = useGridApiRef();
 
 	const [lcomList, setLcomList] = React.useState([]);
 	const [userLcomList, setUserLcomList] = React.useState([]);
@@ -132,17 +127,22 @@ function Main() {
 	const [combNumber, setCombNumber] = React.useState(defaultCombValues.number);
 	const [openFormDlg, setOpenFormDlg] = React.useState(false);
 
+	const [isModifyMode, setModifyMode] = React.useState(false);
+	const [isLcomLoading, setLcomLoading] = React.useState(false);
+
 	const isPortrate = mui.useMediaQuery('(orientation: portrait)');
 
 	const loadLcom = React.useCallback(async () => {
+		setLcomLoading(true);
 		const result = await LCOM.DataRawLoader({ user: userLcomList });
+		setLcomLoading(false);
 		if (!result) return;
 		setLcomList(result);
 	}, [userLcomList]);
 
 	React.useEffect(() => {
 		if (!VerifyUtil.isExistQueryStrings('redirectTo') && !VerifyUtil.isExistQueryStrings('mapiKey')) {
-			// setOpenFormDlg(true);
+			setOpenFormDlg(true);
 		}
 	}, []);
 
@@ -195,32 +195,33 @@ function Main() {
 			console.log(_);
 		}
 
+		setModifyMode(true);
 		setCombValue(combValue);
 	}, []);
 
-	const handleCopy = React.useCallback(
-		(params) => {
-			let combValue = { data: [] };
+	// const handleCopy = React.useCallback(
+	// 	(params) => {
+	// 		let combValue = { data: [] };
 
-			try {
-				const vCombData = params.row.vCOMB;
-				combValue.data = vCombData.map((value) => makeCombData(value));
+	// 		try {
+	// 			const vCombData = params.row.vCOMB;
+	// 			combValue.data = vCombData.map((value) => makeCombData(value));
 
-				const rawName = params.row.NAME;
-				let newCombName = processToken({ name: rawName });
+	// 			const rawName = params.row.NAME;
+	// 			let newCombName = processToken({ name: rawName });
 
-				combValue.name = newCombName;
-				combValue.type = params.row.iTYPE;
-				combValue.number = lcomList.length + 1;
-				combValue.active = params.row.ACTIVE;
-			} catch (_) {
-				console.log(_);
-			}
+	// 			combValue.name = newCombName;
+	// 			combValue.type = params.row.iTYPE;
+	// 			combValue.number = lcomList.length + 1;
+	// 			combValue.active = params.row.ACTIVE;
+	// 		} catch (_) {
+	// 			console.log(_);
+	// 		}
 
-			setCombValue(combValue);
-		},
-		[lcomList.length, setCombValue]
-	);
+	// 		setCombValue(combValue);
+	// 	},
+	// 	[lcomList.length, setCombValue]
+	// );
 
 	const handleRemove = React.useCallback(
 		(params) => {
@@ -239,22 +240,26 @@ function Main() {
 
 	const initializeCombInput = React.useCallback(() => {
 		setCombValue(defaultCombValues);
-	}, []);
+		setModifyMode(true);
+	}, [setCombValue]);
 
 	const refreshLocalComponent = React.useCallback(() => {
-		// ref.current.init();
+		ref.current.init();
 		loadLcom();
 		initializeCombInput();
-	}, [initializeCombInput, loadLcom]);
+		setModifyMode(false);
+		gridRef.current.selectRow(-1, false, true);
+	}, [gridRef, initializeCombInput, loadLcom]);
 
 	const handleNew = React.useCallback(() => {
 		refreshLocalComponent();
+		setModifyMode(false);
 		setCombNumber(defaultCombValues.number);
 	}, [refreshLocalComponent]);
 
 	const handleRefreshData = React.useCallback(() => {
 		setUserLcomList([]);
-		// ref.current.init();
+		ref.current.init();
 		initializeCombInput();
 	}, [initializeCombInput]);
 
@@ -267,6 +272,11 @@ function Main() {
 		}
 
 		const newUserLcomList = [...userLcomList];
+
+		if (!isModifyMode && newUserLcomList.find((value) => value.NAME === combName)) {
+			enqueueSnackbar(`"${combName}" already exists.`, { variant: "error" });
+			return;
+		}
 
 		let userLcomListItem = {
 			key: String(combNumber),
@@ -290,16 +300,9 @@ function Main() {
 		newUserLcomList.push(userLcomListItem);
 		setUserLcomList(newUserLcomList);
 		refreshLocalComponent();
-	}, [
-		combActive,
-		combData,
-		combName,
-		combNumber,
-		combType,
-		enqueueSnackbar,
-		refreshLocalComponent,
-		userLcomList,
-	]);
+
+		enqueueSnackbar(`"${combName}" is added.`, { variant: "success" });
+	}, [combActive, combData, combName, combNumber, combType, enqueueSnackbar, isModifyMode, refreshLocalComponent, userLcomList]);
 
 	const appendCombData = React.useCallback(
 		(items) => {
@@ -357,7 +360,7 @@ function Main() {
 				field: "key",
 				headerName: "No.",
 				editable: false,
-				valueFormatter: ({ value }) => value.padStart(numberPadLeft, "0"),
+				valueGetter: (params) => `${params.row.key}${!params.row.isPending ? "*" : ""}`,
 				flex: 0.1,
 			},
 			{
@@ -392,23 +395,13 @@ function Main() {
 				sortable: false,
 			},
 			{
-				field: "Actions",
-				headerName: "Actions",
+				field: "Delete",
+				headerName: "Delete",
 				type: "actions",
 				editable: false,
 				sortable: false,
-				flex: 1,
+				flex: 0.5,
 				getActions: (params) => [
-					<GridActionsCellItem
-						icon={<EditIcon />}
-						label="Edit"
-						onClick={() => handleEdit(params)}
-					/>,
-					<GridActionsCellItem
-						icon={<ContentCopyIcon />}
-						label="Copy"
-						onClick={() => handleCopy(params)}
-					/>,
 					<GridActionsCellItem
 						icon={<DeleteIcon />}
 						label="Remove"
@@ -417,7 +410,7 @@ function Main() {
 				],
 			},
 		],
-		[handleCopy, handleEdit, handleRemove, numberPadLeft]
+		[handleEdit, handleRemove, numberPadLeft]
 	);
 
 	const AllGridDef = React.useMemo(
@@ -460,31 +453,34 @@ function Main() {
 	);
 
 	return (
-		<div style={{width:"100%", display: "flex", justifyContent: "center"}}>
+		<div style={{width:"100%", display: "flex", justifyContent: "center", backgroundColor: "white"}}>
 			{openFormDlg === true ? (
 				<FormDialog />
 			) : (
 				<MoaStack width="100%" maxWidth="844px">
-					<MoaStack marginX={2}>
-						<GridListComponents
-							dataRequested={requestData}
-							setDataRequested={setRequestData}
-							updateCombData={appendCombData}
-							additionalData={{ LCOM: userLcomList }}
-							ref={ref}
-						/>
-					</MoaStack>
-					<MoaStack marginBottom="10px" marginX="10px">
+					<GridListComponents
+						dataRequested={requestData}
+						setDataRequested={setRequestData}
+						updateCombData={appendCombData}
+						additionalData={{ LCOM: userLcomList }}
+						ref={ref}
+					/>
+					<MoaStack marginBottom="10px">
 						<MoaSeperator />
 					</MoaStack>
 					<MoaStack direction={isPortrate ? "column" : "row"} width="100%" spacing={1} justifyContent="center">
-						<MoaStack direction="column" width={isPortrate? "100%" : "66%"}>
+						<MoaStack direction="column" width={isPortrate? "100%" : "70%"}>
 							<Scrollbars
 								autoHide
 								autoHeightMax="343px"
 								autoHeight
 							>
 								<MoaDataGrid
+									apiRef={gridRef}
+									onCellClick={(params) => {
+										if (params.field === "Delete") return;
+										handleEdit(params);
+									}}
 									initialState={{
 										filter: {
 											filterModel: {
@@ -503,6 +499,7 @@ function Main() {
 											},
 										},
 									}}
+									loading={isLcomLoading}
 									rows={lcomList}
 									columns={LcomListGridDef}
 									getRowId={(row) => row.key}
@@ -513,12 +510,12 @@ function Main() {
 									hideFooter
 								/>
 							</Scrollbars>
-							<MoaStack display="flex" flexDirection="row" justifyContent="right">
-								<MoaButton variant="text" onClick={handleReflectDataIntoCivil}>
-									Send data to civil
+							<MoaStack direction="row" justifyContent="center" marginTop={1} spacing={1}>
+								<MoaButton onClick={handleRefreshData}>
+									CALL DATA FROM MIDAS
 								</MoaButton>
-								<MoaButton variant="text" onClick={handleRefreshData}>
-									Refresh All Data
+								<MoaButton onClick={handleReflectDataIntoCivil}>
+									SEND DATA TO MIDAS
 								</MoaButton>
 							</MoaStack>
 						</MoaStack>
@@ -594,9 +591,11 @@ function Main() {
 									hideFooter
 								/>
 							</Scrollbars>
-							<MoaStack display="flex" flexDirection="row" justifyContent="right">
-								<MoaButton variant="text" onClick={handleNew}>New</MoaButton>
-								<MoaButton variant="text" onClick={handleRegisterLcom}>Registration</MoaButton>
+							<MoaStack direction="row" justifyContent="right" spacing={1} marginTop={1}>
+								<MoaButton onClick={handleRegisterLcom}>
+									{isModifyMode ? "MODIFY" : "ADD"}
+								</MoaButton>
+								<MoaButton onClick={handleNew}>CLEAR</MoaButton>
 							</MoaStack>
 						</MoaStack>
 					</MoaStack>
