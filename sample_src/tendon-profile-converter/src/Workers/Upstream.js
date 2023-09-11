@@ -1,8 +1,6 @@
 /* global pyscript */
 import { loadData, sendData } from "../utils";
-
 export const updateDataIntoProduct = async (tdna, selected) => {
-	//makeMandatoryData contains converted data.
 	try {
 		const values = await makeMandatoryData(selected);
 		const argument = {
@@ -11,29 +9,44 @@ export const updateDataIntoProduct = async (tdna, selected) => {
 			}
 		}
 
-		const sendResult = await sendData("/db/tdna", JSON.stringify(argument), "PUT");
-		console.log(sendResult);
+		await sendData("/db/tdna", JSON.stringify(argument), "PUT");
 	} catch (error) {
 		console.log(error);
 	}
-	//then update each "key" to latest number of "TDNA"
-	//and export it to product.
 };
 
-export const makeDataIntoProduct = async (tdnaData = {}, selected) => {
-	//makeMandatoryData contains converted data.
+export const makeDataIntoProduct = async (selected) => {
 	try {
 		let values = await makeMandatoryData(selected);
-		for (let [key, value] of Object.entries(values)) {
-			
+		const rawTdnaData = (await loadData("/db/tdna"))["TDNA"];
+
+		let lastKey = 0;
+		for (const key of Object.keys(rawTdnaData)) {
+			if (Number(lastKey) < Number(key)) lastKey = Number(key);
 		}
-		//get last number of "TDNA"
+
+		let argument = {
+			"Assign": {},
+		}
+		for (let value of Object.values(values)) {
+			let newName = value["NAME"];
+			
+			try {
+				if (newName.length + "str".length > 20) {
+					console.log("name is too long");
+					continue;
+				}
+				value["NAME"] = newName + "_str";
+				argument["Assign"][++lastKey] = value;
+			} catch { continue; }
+		}
+
+		console.log(argument);
+
+		await sendData("/db/tdna", JSON.stringify(argument), "PUT");
 	} catch (error) {
 		console.log(error);
 	}
-	//then update each "key" to latest number of "TDNA"
-	//and export it to product.
-
 };
 
 const makeMandatoryData = async(tdnaObject) => {
@@ -48,10 +61,6 @@ const makeMandatoryData = async(tdnaObject) => {
 
 		for (const [key, value] of Object.entries(tdnaObject)) {
 			const rawResult = pymain(JSON.stringify(value), JSON.stringify(nodeData), JSON.stringify(elemData));
-			console.log({
-				key,
-				value
-			})
 			try {
 				retValue[key] = JSON.parse(rawResult);
 			} catch(err) {

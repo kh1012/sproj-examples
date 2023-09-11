@@ -11,6 +11,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import HelpDlg from "./Help";
 
 import ListEmpty from "./ListEmpty";
+import ListLoading from "./ListLoading";
 import { importTdnaFromProduct } from "../Workers/Downstream";
 import { makeDataIntoProduct, updateDataIntoProduct } from "../Workers/Upstream";
 
@@ -19,6 +20,7 @@ export default function Contents() {
 	const [state, setState] = React.useState("");
 	const [showHelp, setShowHelp] = React.useState(false);
 	const [items, setItems] = React.useState({});
+	const [loading, setLoading] = React.useState(false);
 
 	const isSelectedEmpty = React.useCallback(() => Object.values(selected).length === 0, [selected]);
 	const isItemsEmpty = React.useCallback(() => Object.values(items).length === 0, [items]);
@@ -33,7 +35,9 @@ export default function Contents() {
 
 	const handleImportData = React.useCallback(() => {
 		const callback = async() => {
+			setLoading(true);
 			setItems(await importTdnaFromProduct());
+			setLoading(false);
 		};
 		callback();
 	}, []);
@@ -42,12 +46,13 @@ export default function Contents() {
 		<React.Fragment>
 			<HelpDlg open={showHelp} setOpen={setShowHelp} />
 			<MoaStack direction="column" justifyContent="center" margin={2} spacing={1}>
-				<MoaButton onClick={handleImportData}>Import Tendon Profile List</MoaButton>
+				<MoaButton onClick={handleImportData} disabled={loading}>Import Tendon Profile List</MoaButton>
 				<MoaStack border={"solid 1px #E6E6E6"} borderRadius="4px">
 					<MoaStack padding={1.5}>
 						<MoaTypography variant="body2" color="disable">Convertable Tendon Profile List</MoaTypography>
 					</MoaStack>
 					<Scrollbars autoHeight autoHeightMin="287px" autoHeightMax="287px">
+						{loading && <ListLoading height="287px" />}
 						{isItemsEmpty() && <ListEmpty height="287px" />}
 						{!isItemsEmpty() && <List
 							items={items}
@@ -58,7 +63,7 @@ export default function Contents() {
 						/>}
 					</Scrollbars>
 				</MoaStack>
-				<MoaButton variant="text" onClick={handleSelectAll} disabled={isItemsEmpty()}>
+				<MoaButton variant="text" onClick={handleSelectAll} disabled={loading || isItemsEmpty()}>
 					{isSelectedEmpty() ? "Select All" : "Deselect All"}
 				</MoaButton>
 				<MoaStack direction="row" justifyContent="space-between">
@@ -68,14 +73,30 @@ export default function Contents() {
 					<MoaStack direction="row" spacing={1} alignItems="center">
 						<MoaTypography variant="h1">Convert to</MoaTypography>
 						<MoaButton
-							onClick={() => makeDataIntoProduct(items, selected)}
-							disabled={isItemsEmpty() || isSelectedEmpty()}
+							onClick={() => {
+								const awaiter = async() => {
+									setLoading(true);
+									await makeDataIntoProduct(selected);
+									handleImportData();
+									setLoading(false);
+								};
+								awaiter();
+							}}
+							disabled={loading || isItemsEmpty() || isSelectedEmpty()}
 						>
 							New
 						</MoaButton>
 						<MoaButton
-							onClick={() => updateDataIntoProduct(items, selected)}
-							disabled={isItemsEmpty() || isSelectedEmpty()}
+							onClick={() => {
+								const awaiter = async() => {
+									setLoading(true);
+									await updateDataIntoProduct(items, selected);
+									handleImportData();
+									setLoading(false);
+								};
+								awaiter();
+							}}
+							disabled={loading || isItemsEmpty() || isSelectedEmpty()}
 						>
 							Modify
 						</MoaButton>
