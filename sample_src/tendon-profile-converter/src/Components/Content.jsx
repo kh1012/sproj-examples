@@ -13,7 +13,7 @@ import HelpDlg from "./Help";
 import ListEmpty from "./ListEmpty";
 import ListLoading from "./ListLoading";
 import { importTdnaFromProduct } from "../Workers/Downstream";
-import { makeDataIntoProduct, updateDataIntoProduct } from "../Workers/Upstream";
+import { useUpstream } from "../Workers/Upstream";
 
 export default function Contents() {
 	const [selected, setSelected] = React.useState({});
@@ -21,6 +21,7 @@ export default function Contents() {
 	const [showHelp, setShowHelp] = React.useState(false);
 	const [items, setItems] = React.useState({});
 	const [loading, setLoading] = React.useState(false);
+	const { makeData, updateData } = useUpstream();
 
 	const isSelectedEmpty = React.useCallback(() => Object.values(selected).length === 0, [selected]);
 	const isItemsEmpty = React.useCallback(() => Object.values(items).length === 0, [items]);
@@ -36,7 +37,9 @@ export default function Contents() {
 	const handleImportData = React.useCallback(() => {
 		const callback = async() => {
 			setLoading(true);
-			setItems(await importTdnaFromProduct());
+			try {
+				setItems(await importTdnaFromProduct());
+			} catch {}
 			setLoading(false);
 		};
 		callback();
@@ -76,7 +79,7 @@ export default function Contents() {
 							onClick={() => {
 								const awaiter = async() => {
 									setLoading(true);
-									await makeDataIntoProduct(selected);
+									await makeData(selected);
 									handleImportData();
 									setLoading(false);
 								};
@@ -90,7 +93,7 @@ export default function Contents() {
 							onClick={() => {
 								const awaiter = async() => {
 									setLoading(true);
-									await updateDataIntoProduct(items, selected);
+									await updateData(selected);
 									handleImportData();
 									setLoading(false);
 								};

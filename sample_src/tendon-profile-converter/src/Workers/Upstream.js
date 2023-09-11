@@ -1,6 +1,38 @@
 /* global pyscript */
+import React from "react";
 import { loadData, sendData } from "../utils";
-export const updateDataIntoProduct = async (tdna, selected) => {
+import { useSnackbar } from "notistack";
+
+export function useUpstream() {
+	const { enqueueSnackbar } = useSnackbar();
+	const updateData = React.useCallback(async (selected) => {
+		try {
+			await updateDataIntoProduct(selected);
+			enqueueSnackbar("Successfully updated to product")
+		} catch (error) {
+			enqueueSnackbar(error, { variant: "error" });
+		}
+	}, [enqueueSnackbar]);
+
+	const makeData = React.useCallback(async (selected) => {
+		try {
+			const handleFail = (message) => {
+				enqueueSnackbar(message, { variant: "error" });
+			};
+
+			const handleSuccess = () => {};
+
+			const successCount = await makeDataIntoProduct(selected, handleSuccess, handleFail);
+			enqueueSnackbar(`${successCount}/${Object.keys(selected).length} items Successfully added to product`, { variant: "success" });
+		} catch (error) {
+			enqueueSnackbar(error, { variant: "error" });
+		}
+	}, [enqueueSnackbar]);
+
+	return { updateData, makeData };
+}
+
+export const updateDataIntoProduct = async (selected, success = () => {}, fail = () => {}) => {
 	try {
 		const values = await makeMandatoryData(selected);
 		const argument = {
@@ -11,11 +43,13 @@ export const updateDataIntoProduct = async (tdna, selected) => {
 
 		await sendData("/db/tdna", JSON.stringify(argument), "PUT");
 	} catch (error) {
-		console.log(error);
+		fail(error);
+		console.debug(error);
 	}
 };
 
-export const makeDataIntoProduct = async (selected) => {
+export const makeDataIntoProduct = async (selected, success = () => {}, fail = () => {}) => {
+	let successCount = 0;
 	try {
 		let values = await makeMandatoryData(selected);
 		const rawTdnaData = (await loadData("/db/tdna"))["TDNA"];
@@ -33,20 +67,22 @@ export const makeDataIntoProduct = async (selected) => {
 			
 			try {
 				if (newName.length + "str".length > 20) {
-					console.log("name is too long");
+					console.debug("name is too long");
+					fail(`${newName} is too long. (max 20)`);
 					continue;
 				}
 				value["NAME"] = newName + "_str";
 				argument["Assign"][++lastKey] = value;
 			} catch { continue; }
-		}
 
-		console.log(argument);
+			successCount++;
+		}
 
 		await sendData("/db/tdna", JSON.stringify(argument), "PUT");
 	} catch (error) {
-		console.log(error);
+		console.debug(error);
 	}
+	return successCount;
 };
 
 const makeMandatoryData = async(tdnaObject) => {
@@ -64,14 +100,14 @@ const makeMandatoryData = async(tdnaObject) => {
 			try {
 				retValue[key] = JSON.parse(rawResult);
 			} catch(err) {
-				console.log(err);
+				console.debug(err);
 				retValue[key] = value;
 			}
 		}
 
 		return retValue;
 	} catch (error) {
-		console.log(error);
+		console.debug(error);
 		return tdnaObject;
 	};
 };

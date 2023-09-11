@@ -1,7 +1,7 @@
 import React from "react";
 import MKeyDialog from "./Components/MKeyDialog";
 import Contents from "./Components/Content";
-import Help from "./Components/Help";
+import { SnackbarProvider } from "notistack";
 import { VerifyUtil } from "midas-components";
 
 function App() {
@@ -17,8 +17,10 @@ function App() {
 
 	return (
 		<React.Fragment>
-			{showDialog && <MKeyDialog />}
-			<Contents />
+			<SnackbarProvider maxSnack={3}>
+				{showDialog && <MKeyDialog />}
+				<Contents />
+			</SnackbarProvider>
 			<py-script src="./Runtime/pyruntime.py"></py-script>
 		</React.Fragment>
 	);
