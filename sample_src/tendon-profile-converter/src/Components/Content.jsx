@@ -9,8 +9,10 @@ import List from "./List";
 
 import HelpIcon from '@mui/icons-material/Help';
 import HelpDlg from "./Help";
-import { loadData } from "../utils";
+
 import ListEmpty from "./ListEmpty";
+import { importTdnaFromProduct } from "../Workers/Downstream";
+import { makeDataIntoProduct, updateDataIntoProduct } from "../Workers/Upstream";
 
 export default function Contents() {
 	const [selected, setSelected] = React.useState({});
@@ -31,19 +33,7 @@ export default function Contents() {
 
 	const handleImportData = React.useCallback(() => {
 		const callback = async() => {
-			const result = await loadData("/db/tdna");
-			let tdnaData = {};
-			if (result) {
-				tdnaData = result["TDNA"];
-				let listData = {};
-				Object.entries(tdnaData).forEach(([key, value]) => {
-					if (value["CURVE"] === "SPLINE" && value["SHAPE"] === "ELEMENT" && value["INPUT"] === "3D") {
-						listData[key] = value;
-					}
-				});
-				setItems(listData);
-			}
-
+			setItems(await importTdnaFromProduct());
 		};
 		callback();
 	}, []);
@@ -77,8 +67,18 @@ export default function Contents() {
 					</IconButton>
 					<MoaStack direction="row" spacing={1} alignItems="center">
 						<MoaTypography variant="h1">Convert to</MoaTypography>
-						<MoaButton>New</MoaButton>
-						<MoaButton>Modify</MoaButton>
+						<MoaButton
+							onClick={() => makeDataIntoProduct(items, selected)}
+							disabled={isItemsEmpty() || isSelectedEmpty()}
+						>
+							New
+						</MoaButton>
+						<MoaButton
+							onClick={() => updateDataIntoProduct(items, selected)}
+							disabled={isItemsEmpty() || isSelectedEmpty()}
+						>
+							Modify
+						</MoaButton>
 					</MoaStack>
 				</MoaStack>
 			</MoaStack>

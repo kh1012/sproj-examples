@@ -1,6 +1,33 @@
 import math
+import json
 import numpy as np
 from collections import Counter
+
+
+"""**************************************************************************************************************
+MIDAS API - REQUEST FUNCITON
+*************************************************************************************************************"""
+def MidasAPI(mapikey, method, command, body=None) :
+    BaseURL = "https://api-beta.midasit.com:443/civil"
+    URL = BaseURL + command
+    headers = {
+        "Content-Type" : "application/json",
+        "MAPI-Key" : mapikey
+    }   
+    if method == "POST" :
+        res = requests.post(url=URL, headers=headers, json=body)
+    elif method == "PUT" :
+        res = requests.put(url=URL, headers=headers, json=body)
+    elif method == "GET" :
+        res = requests.get(url=URL, headers=headers)
+    elif method == "DELETE" :
+        res = requests.delete(url=URL, headers=headers)
+    print(method, URL, command, res.status_code)
+    return res.json()
+
+"""**************************************************************************************************************
+주석의 예제는 예제 MCB파일의 15번 텐던 "B4L"로 하였다.
+*************************************************************************************************************"""
 
 """##################################################################################################################
 텐던 프로파일에 적용되어 있는 요소와 노드를 axis_ij에 따라 정리하도록 한다.
@@ -439,10 +466,31 @@ def sort_global_coords(x_global_coords, y_global_coords, z_global_coords):
 
 """##################################################################################################################"""
 def proc(ap_profile, node, elem):
+	ap_profile = json.loads(ap_profile)
+	node = json.loads(node)
+	elem = json.loads(elem)
 	sorted_node_list, sorted_elem_list = sort_node_elem_list(ap_profile["ELEM"], elem, ap_profile["AXIS_IJ"])
 	elem_lengths, acc_elem_lengths = calculate_element_lengths(sorted_node_list, node, elem, ap_profile["INS_PT"], ap_profile["INS_ELEM"] )
 	x_coords, y_re_coords, z_re_coords = tendon_relative_y_z_coordinate(ap_profile["PROF"], ap_profile["OFF_YZ"], ap_profile["XAR_ANGLE"], ap_profile["bPJ"], ap_profile["AXIS_IJ"])
 	x_re_coords, elem_inx = tendon_relative_x_coordinate(acc_elem_lengths, x_coords)
 	x_global_coords, y_global_coords, z_global_coords = tendon_absolute_coordinates(node,sorted_node_list,elem_inx,x_re_coords,y_re_coords,z_re_coords)
 	x_global_re_coords, y_global_re_coords, z_global_re_coords = sort_global_coords(x_global_coords, y_global_coords, z_global_coords)
-	return x_global_re_coords, y_global_re_coords, z_global_re_coords
+
+	# 변환할 텐던 프로파일을 복사
+	new_tdna = ap_profile
+
+	# STARIGHT 용으로 데이터를 다시 만든다.
+	new_tdna["SHAPE"] = "STRAIGHT"
+	del new_tdna["INS_PT"]
+	del new_tdna["AXIS_IJ"]
+	del new_tdna["XAR_ANGLE"]
+	del new_tdna["OFF_YZ"]
+
+	# 계산된 절대좌표를 입력한다.
+	for i in range(len(new_tdna["PROF"])) :
+		new_tdna["PROF"][i]["PT"][0] = x_global_re_coords[i]
+		new_tdna["PROF"][i]["PT"][1] = y_global_re_coords[i]
+		new_tdna["PROF"][i]["PT"][2] = z_global_re_coords[i]
+
+	# 새로운 프로파일을 등록한다.
+	return json.dumps(new_tdna)
