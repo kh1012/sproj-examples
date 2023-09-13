@@ -41,6 +41,7 @@ export default function Contents() {
 				setItems(await importTdnaFromProduct());
 			} catch {}
 			setLoading(false);
+			setSelected([]);
 		};
 		callback();
 	}, []);
