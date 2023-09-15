@@ -6,7 +6,7 @@ export const importTdnaFromProduct = async() => {
 	if (result) {
 		tdnaData = result["TDNA"];
 		Object.entries(tdnaData).forEach(([key, value]) => {
-			if (value["CURVE"] === "SPLINE" && value["SHAPE"] === "ELEMENT" && value["INPUT"] === "3D") {
+			if (value["CURVE"] === "SPLINE" && value["SHAPE"] === "ELEMENT" && (value["INPUT"] === "3D" || value["INPUT"] === "2D")) {
 				listData[key] = value;
 			}
 		});

@@ -7,7 +7,7 @@ import MoaStack from "@midasit-dev/moaui/Stack";
 import Scrollbars from "rc-scrollbars";
 import List from "./List";
 
-import HelpIcon from '@mui/icons-material/Help';
+import HelpIcon from "./HelpIcon";
 import HelpDlg from "./Help";
 
 import ListEmpty from "./ListEmpty";

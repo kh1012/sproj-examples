@@ -56,11 +56,16 @@ export const sendData = async (targetUrl, body, method = "PUT") => {
     };
 
     try {
-      const res = await fetch((await VerifyUtil.getBaseUrlAsync()) + targetUrl, opts);
+      const res = await fetch(
+				(await VerifyUtil.getBaseUrlAsync()) + targetUrl,
+				opts
+			).catch((reason) => {
+				throw Error(reason);
+			});
       const json = await res.json();
       return json;
     } catch (_) {
-      return "";
+     	throw Error(_);
     }
   } else {
     return "mapiKey is not verified."

@@ -2,7 +2,7 @@ import React from "react";
 import MoaTypography from "@midasit-dev/moaui/Typography";
 import MoaButton from "@midasit-dev/moaui/Button";
 import MoaStack from "@midasit-dev/moaui/Stack";
-import HelpIcon from "@mui/icons-material/Help";
+import HelpIcon from "./HelpIcon";
 
 //mui
 import Dialog from "@mui/material/Dialog";
@@ -71,6 +71,17 @@ export default function Help(props) {
 						<MoaButton>Modify</MoaButton>
 						<MoaTypography>Edit imported tendon profile</MoaTypography>
 					</MoaStack>
+					<br />
+					<MoaTypography variant="h1">
+						Improper conditions
+					</MoaTypography>
+					<MoaTypography paddingLeft={1}>
+						2D/3D : When Straight Length of Tendon,
+						Transfer Length existed.
+					</MoaTypography>
+					<MoaTypography paddingLeft={1}>
+						2D : Fix and BOT selections are not supported.
+					</MoaTypography>
 				</MoaStack>
 			</MoaStack>
 		</Dialog>

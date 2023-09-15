@@ -3,31 +3,10 @@ import json
 import numpy as np
 from collections import Counter
 
-
-"""**************************************************************************************************************
-MIDAS API - REQUEST FUNCITON
-*************************************************************************************************************"""
-def MidasAPI(mapikey, method, command, body=None) :
-    BaseURL = "https://api-beta.midasit.com:443/civil"
-    URL = BaseURL + command
-    headers = {
-        "Content-Type" : "application/json",
-        "MAPI-Key" : mapikey
-    }   
-    if method == "POST" :
-        res = requests.post(url=URL, headers=headers, json=body)
-    elif method == "PUT" :
-        res = requests.put(url=URL, headers=headers, json=body)
-    elif method == "GET" :
-        res = requests.get(url=URL, headers=headers)
-    elif method == "DELETE" :
-        res = requests.delete(url=URL, headers=headers)
-    print(method, URL, command, res.status_code)
-    return res.json()
-
 """**************************************************************************************************************
 주석의 예제는 예제 MCB파일의 15번 텐던 "B4L"로 하였다.
 *************************************************************************************************************"""
+
 
 """##################################################################################################################
 텐던 프로파일에 적용되어 있는 요소와 노드를 axis_ij에 따라 정리하도록 한다.
@@ -212,79 +191,47 @@ def calculate_element_lengths(sorted_node_list, res_node, res_elem, insert_point
     계산된 elem_lengths, acc_elem_lengths 반환한다.
     **************************************************************************************************************"""
     return elem_lengths, acc_elem_lengths
+# Given coordinates
 
-"""##################################################################################################################
-tendon profile에 입력된 좌표값을 x축의 회전각, 투영, 오프셋 등의 옵션을 고려하여, 텐던의 y, z 상대좌표를 다시 계산한다.
-##################################################################################################################"""
-def tendon_relative_y_z_coordinate(profile, off_yz, xar_angle, projection, axis_ij) :
-    """**************************************************************************************************************
-    입력값을 정비한다.
-    Example----------------------------------------------------------------------------------------------------------
-    x_coords = [
-        -20, -12, 0, 2, 4, 6, 8, 10, 12, 14,
-        16, 18, 20, 22, 24, 26, 28, 30, 32, 34,
-        36, 38, 40, 41, 43, 45, 47, 49, 60
-        ]
-    y_coords = [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0
-        ]
-    z_coords = [
-        -2.3, -2.25, -2.25, -2.41404, -2.57736, -2.711, -2.79999, -2.84444, -2.85, -2.85,
-        -2.85, -2.85, -2.85, -2.85, -2.85, -2.85, -2.80127, -2.65473, -2.40933, -2.06325,
-        -1.61388, -1.15756, -0.928432, -0.9, -1.00025, -1.30408, -1.77124, -2.25, -2.25]
-    off_y = 2.666
-    off_z = 0
-    xar_radians = -0.19739673840055869
-    **************************************************************************************************************"""
+# Define Interpolation function
+def interpolate_linear(x, y, x_target):
+#     """
+#     Linear interpolation function.
+    
+#     Parameters:
+#     x (list): List of known x values.
+#     y (list): List of known y values.
+#     x_target (float): Target x value for interpolation.
+    
+    # Returns:
+    # float: Interpolated y value.
+    # """
+    i = 0
+    while i < len(x) and x[i] < x_target:
+        i += 1
+
+    if i == 0 or i == len(x):
+        return None
+
+    x1, x2 = x[i-1], x[i]
+    y1, y2 = y[i-1], y[i]
+
+    return y1 + (y2 - y1) * (x_target - x1) / (x2 - x1)
+
+# Define your tendon_relative_y_z_coordinate function here
+def tendon_relative_3D_y_z_coordinate(profile, off_yz, xar_angle, projection, axis_ij):
     x_coords = [item['PT'][0] for item in profile]
     y_coords = [item['PT'][1] for item in profile]
     z_coords = [item['PT'][2] for item in profile]
     off_y = off_yz[0]
     off_z = off_yz[1]
     xar_radians = math.radians(xar_angle)
-    # print("x_coords =", x_coords)
-    # print("y_coords =", y_coords)
-    # print("z_coords =", z_coords)
-    # print("off_y =", off_y)
-    # print("off_z =", off_z)
-    # print("xar_radians =", xar_radians)
-    """**************************************************************************************************************
-    시작되는 절점에 따라 y값의 부호를 바꾼다.
-    y값의 경우, 요소의 로컬 좌표계를 따라가는데,
-    I단으로 시작할 경우, 이 요소의 로컬 좌표계와 계산상의 요소의 좌표계가 일치하므로 문제가 없다.
-    하지만, J 단으로 시작할 경우, 실제 요소의 로컬 좌표계와 계산상의 요소 좌표계가 뒤바뀌게 된다.
-    따라서, J으로 시작할 경우 y좌표에 음수를 적용하여, 계산상의 요소 좌표계와 맞춰주도록 부호를 뒤집어 준다.
-    Example----------------------------------------------------------------------------------------------------------
-    x_coords = 1
-    **************************************************************************************************************"""
+    
     if axis_ij == "I-J" :
         sign = 1
     elif axis_ij == "J-I" :
         sign = -1
-    # print("sign =", sign)
-    """**************************************************************************************************************
-    투영 옵션 여부에 따라, xar_angle의 적용 방법이 달라진다.
-    투영 옵션이 켜져 있을 경우,
-    계산되는 좌표에서 y축으로 내린 곳이 원점이 되어 회전을 하고, 오프셋 값을 고려한다.
-    투영 옵션이 꺼져 있을 경우,
-    원점에서 회전을 하고, 오프셋 값을 고려한다.
-    Example----------------------------------------------------------------------------------------------------------
-    y_re_coords = [
-        2.205997180906114, 2.2159972421907637, 2.2159972421907637, 2.1831890411280845, 2.150524840947905,
-        2.1237966771462933, 2.1059985680718736, 2.09710851358982, 2.0959965067749673, 2.0959965067749673,
-        2.0959965067749673, 2.0959965067749673, 2.0959965067749673, 2.0959965067749673, 2.0959965067749673,
-        2.0959965067749673, 2.1057425665029865, 2.135050746116038, 2.184131046901099, 2.2533474710889303,
-        2.343222021878591, 2.434486581186818, 2.480312462027402, 2.485998896876305, 2.4659487740005828,
-        2.4051824015982803, 2.311749829003541, 2.2159972421907637, 2.2159972421907637
-        ]
-    z_re_coords = [
-        -2.3, -2.25, -2.25, -2.41404, -2.57736, -2.711, -2.79999, -2.84444, -2.85, -2.85,
-        -2.85, -2.85, -2.85, -2.85, -2.85, -2.85, -2.80127, -2.65473, -2.40933, -2.06325,
-        -1.61388, -1.15756, -0.928432, -0.9, -1.00025, -1.30408, -1.77124, -2.25, -2.25
-        ]
-    **************************************************************************************************************"""
+        
     y_re_coords = []
     z_re_coords = []
     for value in enumerate(x_coords) :
@@ -297,12 +244,79 @@ def tendon_relative_y_z_coordinate(profile, off_yz, xar_angle, projection, axis_
             del_length = math.sqrt(z_coords[value[0]]**2 + y_coords[value[0]]**2)
             y_re_coords.append((del_length * math.cos(del_angle) + off_y)*sign)
             z_re_coords.append(del_length * math.sin(del_angle) + off_z)
-    # print("y_re_coords =", y_re_coords)
-    # print("z_re_coords =", z_re_coords)
-    """**************************************************************************************************************
-    계산된 x_coords, y_re_coords, z_re_coords 반환한다.
-    **************************************************************************************************************"""
+    return x_coords, y_re_coords, z_re_coords        
+    
+    pass
+
+# Define tendon_relative_2D_y_z_coordinates function
+# (X,Y) and (X,Z) 2D coordinates can have different x-axis coordinates, so they need to be combined and also need Y and Z-coordinates interpolation.
+def tendon_relative_2D_y_z_coordinate(profiley, profilez, off_yz, xar_angle, projection, axis_ij):
+    xy_x_coords = [item['PT'][0] for item in profiley]
+    xz_x_coords = [item['PT'][0] for item in profilez]
+
+    # Combined X-coordinates here
+    combined_list = xy_x_coords + xz_x_coords
+    unique_list = list(set(combined_list))
+    
+    """Example----------------------------------------------------------------------------------------------------------
+    print(combined_list)
+    [0, 4, 6, 10, 12, 18, 20, 22, 26, 28, 30, 36, 38, 42, 46, 48, 0, 4, 6, 8, 12, 14, 16, 18, 20, 22, 30, 34, 36, 40, 42, 44, 48]
+    ----------------------------------------------------------------------------------------------------------"""
+    # Remove duplicated x-coordinates components here
+    x_coords = sorted(unique_list)
+    
+    """Example----------------------------------------------------------------------------------------------------------
+    # print(x_coords)
+    # [0, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 26, 28, 30, 34, 36, 38, 40, 42, 44, 46, 48]
+    ----------------------------------------------------------------------------------------------------------"""
+    # Import Y and Z coordinates here    
+    y_coords = [item['PT'][1] for item in profiley]
+    z_coords = [item['PT'][1] for item in profilez]
+
+    """Example----------------------------------------------------------------------------------------------------------
+    print(y_coords)
+    print(z_coords)
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [-1, -1.53523, -1.772186, -1.961274, -2.197042, -2.244117, -2.25, -2.25, -2.25, -2.25, -1.944484, -1.251675, -0.760567, -0.3, -0.360662, -0.543321, -1.25]
+    ----------------------------------------------------------------------------------------------------------"""
+        
+    # Apply offset and angle conditions here
+    off_y = off_yz[0]
+    off_z = off_yz[1]
+    xar_radians = math.radians(xar_angle)
+
+    # Projection value chagnes depending on direction
+    if axis_ij == "I-J" :
+        sign = 1
+    elif axis_ij == "J-I" :
+        sign = -1
+
+    # When Y or Z coordintes doesn't have matched value on each x-coordinate, find a new proper value using linear interpolation here
+    y_re_coords = []
+    z_re_coords = []
+
+    for value in x_coords:
+        if value in xy_x_coords and value in xz_x_coords:
+            y_value = y_coords[xy_x_coords.index(value)]
+            z_value = z_coords[xz_x_coords.index(value)]
+        else:
+            y_value = interpolate_linear(xy_x_coords, y_coords, value)
+            z_value = interpolate_linear(xz_x_coords, z_coords, value)
+        
+        if y_value is not None and z_value is not None:
+            if projection:
+                del_y = z_value / math.cos(xar_radians) * math.sin(xar_radians) * -1
+                y_re_coords.append((y_value + del_y + off_y) * sign)
+                z_re_coords.append(z_value + off_z)
+            else:
+                del_angle = math.atan2(z_value, y_value) + xar_radians
+                del_length = math.sqrt(z_value**2 + y_value**2)
+                y_re_coords.append((del_length * math.cos(del_angle) + off_y) * sign)
+                z_re_coords.append(del_length * math.sin(del_angle) + off_z)
+
     return x_coords, y_re_coords, z_re_coords
+
+
 
 """##################################################################################################################
 tendon profile에 입력된 텐던의 x값을 각 해당되는 요소의 상대좌표로 변환한다.
@@ -355,31 +369,6 @@ def tendon_relative_x_coordinate(acc_elem_length, x_coords) :
 def tendon_absolute_coordinates(res_node, sorted_node_list, elem_inx, x_re_coords, y_re_coords, z_re_coords) :
     """**************************************************************************************************************
     텐던이 가지고 있는 기준 요소로부터의 상대좌표, 그리고 기준 요소의 시작점과 끝점을 이용해 절대좌표를 구한다.
-    Example----------------------------------------------------------------------------------------------------------
-    x_global_coords = [
-        30.078589383391503, 36.06503566510263, 45.66585136648489, 47.290061493353434, 48.9289392048315,
-        50.5960709744228, 52.29903299168125, 54.03756770010731, 55.711951979163274, 57.4924469150148,
-        59.27999206963629, 61.07228925273536, 62.86712615989258, 64.66236908950306, 66.35327562877778,
-        68.14355242332573, 71.14127256225436, 72.45386717555624, 73.83273392790638, 75.59277144525684,
-        77.15897133813569, 79.031095173081, 80.78588803794081, 81.61880248546188, 83.20349147225896,
-        84.68304366335016, 86.07824575697286, 87.46745714998553, 96.4679985212359
-        ]
-    y_global_coords = [
-        8.238934270468592, 11.686781927323997, 15.832820630574759, 16.281657569448438, 16.67629436365904,
-        17.02422418542604, 17.326625850309977, 17.57968675716629, 17.70261366603005, 17.829038094749635,
-        17.89184175184425, 17.891549159251696, 17.828980593336638, 17.705206064594353, 17.47515890073233,
-        17.226467035077356, 16.395278645350164, 15.403172243869452, 14.479890630657644, 13.656736785591164,
-        12.999528732161105, 12.36098048228861, 11.71976885172274, 11.398153307638253, 10.753080365908158,
-        10.105620847883308, 9.456246605886449, 8.806736376636328, 5.26529898779041
-        ]
-    z_global_coords = [
-        -23.35488781754013, -27.518848190618247, -33.95539968997302, -35.17977890014892, -36.40524172004082,
-        -37.60683537756225, -38.77123636218705, -39.89760770470711, -40.98451083345714, -42.06650775716865,
-        -43.14444879200461, -44.21746742713898, -45.28473169087763, -46.34544960612888, -47.38848046753089,
-        -48.43097711534481, -49.42448906279393, -50.06579318508942, -50.658118367104244, -51.24909041775335,
-        -51.76387065232773, -52.315201443595676, -53.0663001707967, -53.51758464768372, -54.55830256570909,
-        -55.778026594853046, -57.14136526261082, -58.514903708779904, -63.75403304916604
-        ]
     **************************************************************************************************************"""
     start_point = []
     end_point = []
@@ -471,7 +460,13 @@ def proc(ap_profile, node, elem):
 	elem = json.loads(elem)
 	sorted_node_list, sorted_elem_list = sort_node_elem_list(ap_profile["ELEM"], elem, ap_profile["AXIS_IJ"])
 	elem_lengths, acc_elem_lengths = calculate_element_lengths(sorted_node_list, node, elem, ap_profile["INS_PT"], ap_profile["INS_ELEM"] )
-	x_coords, y_re_coords, z_re_coords = tendon_relative_y_z_coordinate(ap_profile["PROF"], ap_profile["OFF_YZ"], ap_profile["XAR_ANGLE"], ap_profile["bPJ"], ap_profile["AXIS_IJ"])
+    
+	if ap_profile["INPUT"] == "3D" :
+		x_coords, y_re_coords, z_re_coords = tendon_relative_3D_y_z_coordinate(ap_profile["PROF"], ap_profile["OFF_YZ"], ap_profile["XAR_ANGLE"], ap_profile["bPJ"], ap_profile["AXIS_IJ"])
+
+	elif ap_profile["INPUT"] == "2D" :
+		x_coords, y_re_coords, z_re_coords = tendon_relative_2D_y_z_coordinate(ap_profile["PROFY"], ap_profile["PROFZ"], ap_profile["OFF_YZ"], ap_profile["XAR_ANGLE"], ap_profile["bPJ"], ap_profile["AXIS_IJ"])
+
 	x_re_coords, elem_inx = tendon_relative_x_coordinate(acc_elem_lengths, x_coords)
 	x_global_coords, y_global_coords, z_global_coords = tendon_absolute_coordinates(node,sorted_node_list,elem_inx,x_re_coords,y_re_coords,z_re_coords)
 	x_global_re_coords, y_global_re_coords, z_global_re_coords = sort_global_coords(x_global_coords, y_global_coords, z_global_coords)
@@ -486,11 +481,38 @@ def proc(ap_profile, node, elem):
 	del new_tdna["XAR_ANGLE"]
 	del new_tdna["OFF_YZ"]
 
+	"""기존의 2-D tendon profile들은 (x,y)와 (x,z) 좌표 갯수가 맞지 않을 수 있다. 그렇기에 갯수가 동일한 3D와 달리 2-D tendon profile은 straight 용 데이터의 길이만큼 (x,y), (x,z)의 좌표를 생성한다."""
+	N_Profy =[]
+	N_Profz =[]
 	# 계산된 절대좌표를 입력한다.
-	for i in range(len(new_tdna["PROF"])) :
-		new_tdna["PROF"][i]["PT"][0] = x_global_re_coords[i]
-		new_tdna["PROF"][i]["PT"][1] = y_global_re_coords[i]
-		new_tdna["PROF"][i]["PT"][2] = z_global_re_coords[i]
+	if ap_profile["INPUT"] == "3D" :
+		for i in range(len(new_tdna["PROF"])) :
+			new_tdna["PROF"][i]["PT"][0] = x_global_re_coords[i]
+			new_tdna["PROF"][i]["PT"][1] = y_global_re_coords[i]
+			new_tdna["PROF"][i]["PT"][2] = z_global_re_coords[i]
+
+	elif ap_profile["INPUT"] == "2D" :
+		for i in range(len(x_global_re_coords)) :
+			N_Profy.append({
+				"PT" : [x_global_re_coords[i], y_global_re_coords[i]],
+				"bFiX" : False,
+				"R" : 0,
+				"RADIUS" : 0,
+				"OPT" : "NONE",
+				"bBOTZ" : False
+			})
+		for i in range(len(x_global_re_coords)) :
+			N_Profz.append({
+				"PT" : [x_global_re_coords[i], z_global_re_coords[i]],
+				"bFiX" : False,
+				"R" : 0,
+				"RADIUS" : 0,
+				"OPT" : "NONE",
+				"bBOTZ" : False
+			})     
+
+	new_tdna["PROFY"] = N_Profy
+	new_tdna["PROFZ"] = N_Profz
 
 	# 새로운 프로파일을 등록한다.
 	return json.dumps(new_tdna)

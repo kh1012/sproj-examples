@@ -51,7 +51,7 @@ export const updateDataIntoProduct = async (selected, success = () => {}, fail =
 export const makeDataIntoProduct = async (selected, success = () => {}, fail = () => {}) => {
 	let successCount = 0;
 	try {
-		let values = await makeMandatoryData(selected);
+		let values = await makeMandatoryData(selected, fail);
 		const rawTdnaData = (await loadData("/db/tdna"))["TDNA"];
 
 		let lastKey = 0;
@@ -85,7 +85,7 @@ export const makeDataIntoProduct = async (selected, success = () => {}, fail = (
 	return successCount;
 };
 
-const makeMandatoryData = async(tdnaObject) => {
+const makeMandatoryData = async(tdnaObject, fail = () => {}) => {
 	const nodeData = await loadData("/db/node");
 	const elemData = await loadData("/db/elem");
 
@@ -101,13 +101,14 @@ const makeMandatoryData = async(tdnaObject) => {
 				retValue[key] = JSON.parse(rawResult);
 			} catch(err) {
 				console.debug(err);
-				retValue[key] = value;
+				fail(`failed to process ${key}`);
+				continue;
 			}
 		}
 
 		return retValue;
 	} catch (error) {
 		console.debug(error);
-		return tdnaObject;
+		return {};
 	};
 };
