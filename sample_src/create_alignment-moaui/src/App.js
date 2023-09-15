@@ -1,10 +1,8 @@
 import './App.css';
 import * as React from 'react';
-// Material UI import data
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
+import MoaPanel from "@midasit-dev/moaui/Panel";
+import MoaStack from "@midasit-dev/moaui/Stack";
+import Sep from '@midasit-dev/moaui/Seperator';
 import { useSnackbar } from 'notistack';
 // UserDefined Components
 import * as Buttons from './Components/Buttons'
@@ -16,18 +14,6 @@ import VerticalTabs from './Components/Tabs';
 import { CreateLayout } from './Function/CreateLayout';
 import { midasAPI, convertChartData, chartScaleSet } from './Function/Common';
 import { checkAllTrue, AlignDataValid, SegmDataValid, NodeElemValid } from './Function/Validation';
-
-//Paper
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: "1px",
-  textAlign: 'left',
-  color: theme.palette.text.secondary,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center"
-}));
 
 //Data Grid Default Setting
 const AlignDefault = [
@@ -53,6 +39,14 @@ const enqueueMessage = (func, message, variant = "error") => {
       },
   );
 };
+
+function Seperator() {
+	return (
+		<div width="100%">
+			<Sep />
+		</div>
+	);
+}
 
 function App() {
 
@@ -184,36 +178,47 @@ function App() {
     setChartLineData(chartDefault);
     setChartScale(chartScaleDefault);
   }
+
+  React.useEffect(() => {
+	console.log({
+		align: alignGrid,
+		segm: segmGrid,
+	})
+  }, [alignGrid, segmGrid]);
+
   //Main UI
   return (
-    <div className="App">
-      <div className="MainApp">
-      <Item sx={{ height: 700 }}>
-        <Stack direction="row" spacing={2} justifyContent="center" alignItems="center" sx={{ marginBottom: 2, marginTop: 2 }}>
-          {TextFieldInput("Start Node", nodeStart, setNodeStart)}
-          {TextFieldInput("Start Elem", elemStart, setElemStart)}
-          <Divider orientation="vertical" flexItem />
-          {Buttons.MainButton("contained", "Create", checkData)}
-          {Buttons.SubButton("contained", "Data Clear", clearData)}
-        </Stack>
-        <Divider />
-          {VerticalTabs(
-            tabValue, setTabValue,
-            DataGrids.DataGridAlign(alignGrid, setAlignGrid, AlignModalOpen),
-            DataGrids.DataGridSegm(segmGrid, setSegmGrid, SegmModalOpen)
-          )}
-        <Divider />
-        <Item sx={{ height: 350, padding: 0 }}>
-          <div className='userWrap'>
-            <div className='chartStyle'>{Charts.ChartScatter(chartNodeData, chartScale)}</div>
-            <div className='chartStyle'>{Charts.ChartLine(chartLineData, chartScale)}</div>
-          </div>
-        </Item>
-      </Item>
-      {Modals.AlignHelp(openAlignModal, AlignModalClose)}
-      {Modals.SegmHelp(openSegmModal, SegmModalClose)}
-      </div>
-    </div>
+	<div className="App">
+		<div className="MainApp">
+			<MoaPanel height={700}>
+				<MoaStack direction="row" justifyContent="space-between" alignItems="center" marginX={2} marginY={2}>
+					<MoaStack direction="row" spacing={2}>
+						{TextFieldInput("Start Node", nodeStart, setNodeStart)}
+						{TextFieldInput("Start Elem", elemStart, setElemStart)}
+					</MoaStack>
+					<MoaStack direction="row" spacing={2}>
+						{Buttons.MainButton("contained", "Create", checkData)}
+						{Buttons.SubButton("contained", "Data Clear", clearData)}
+					</MoaStack>
+				</MoaStack>
+				<Seperator />
+				{VerticalTabs(
+					tabValue, setTabValue,
+					DataGrids.DataGridAlign(alignGrid, setAlignGrid, AlignModalOpen),
+					DataGrids.DataGridSegm(segmGrid, setSegmGrid, SegmModalOpen)
+				)}
+				<Seperator />
+				<MoaStack height={350} padding={0}>
+				<div className='userWrap'>
+					<div className='chartStyle'>{Charts.ChartScatter(chartNodeData, chartScale)}</div>
+					<div className='chartStyle'>{Charts.ChartLine(chartLineData, chartScale)}</div>
+				</div>
+				</MoaStack>
+			</MoaPanel>
+		{Modals.AlignHelp(openAlignModal, AlignModalClose)}
+		{Modals.SegmHelp(openSegmModal, SegmModalClose)}
+		</div>
+	</div>
   );
 }
 

@@ -1,12 +1,13 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import { DataGrid, useGridApiContext  } from '@mui/x-data-grid';
+import Panel from "@midasit-dev/moaui/Panel";
+import Stack from "@midasit-dev/moaui/Stack";
+import MoaDataGrid from '@midasit-dev/moaui/DataGrid';
+import { useGridApiContext  } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import Select from '@mui/material/Select';
+import DropList from '@midasit-dev/moaui/DropList';
 
 //Select for Line Type in Alignments Data Grid
 function SelectEditInputCell(props) {
@@ -19,20 +20,14 @@ function SelectEditInputCell(props) {
   };
 
   return (
-    <Select
-      value={value}
-      onChange={handleChange}
-      size="small"
-      sx={{ height: 1 }}
-      native
-      autoWidth
-      autoFocus
-    >
-      <option>Straight</option>
-      <option>Arc</option>
-      <option>Clothoid</option>
-      <option>Cubic Parabola</option>
-    </Select>
+	<React.Fragment>
+	<DropList itemList={
+			() => new Map([["Straight", "Straight"], ["Arc", "Arc"], ["Clothoid", "Clothoid"], ["Cubic Parabola","Cubic Parabola"]])
+		}
+		value={value}
+		onChange={handleChange}
+	/>
+	</React.Fragment>
   );
 }
 
@@ -164,38 +159,31 @@ export function DataGridAlign(alignGrid, setAlignGrid, AlignHelpModal) {
   }, []);
 
   return (
-    <Box sx={{marginLeft:3}}>
-      <Stack direction="column" spacing={0} >
-        <Stack direction="row" spacing={0}>
-          <IconButton aria-label="Add" color="primary" onClick={addRow}> 
-            <AddCircleOutlineIcon />
-          </IconButton>
-          <IconButton aria-label="Delete" color="secondary" onClick={removeRow}> 
-            <RemoveCircleOutlineIcon />
-          </IconButton>
-          <IconButton aria-label="Help"onClick={AlignHelpModal}> 
-            <HelpOutlineIcon />
-          </IconButton>
-        </Stack>
-        <Box sx={{height:220,width:"100%"}}>
-          <DataGrid
-            sx={{fontSize:"14px"}}
-            rows={alignGrid}
-            columns={columnsAlign}
-            disableColumnMenu={true}
-            hideFooter={true}
-            desity="compact"
-            rowHeight={28}
-            processRowUpdate={processRowUpdate}
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-            columnHeaderHeight={28}
-            showCellVerticalBorder
-            showColumnVerticalBorder
-          />
-        </Box>
-      </Stack>
-    </Box>
-  );
+		<Stack direction="column" spacing={0} width="100%">
+			<Stack direction="row" spacing={0}>
+				<IconButton aria-label="Add" color="primary" onClick={addRow}>
+					<AddCircleOutlineIcon />
+				</IconButton>
+				<IconButton aria-label="Delete" color="secondary" onClick={removeRow}>
+					<RemoveCircleOutlineIcon />
+				</IconButton>
+				<IconButton aria-label="Help" onClick={AlignHelpModal}>
+					<HelpOutlineIcon />
+				</IconButton>
+			</Stack>
+			<MoaDataGrid
+				rows={alignGrid}
+				columns={columnsAlign}
+				disableColumnMenu={true}
+				hideFooter={true}
+				desity="compact"
+				processRowUpdate={processRowUpdate}
+				onProcessRowUpdateError={handleProcessRowUpdateError}
+				showCellVerticalBorder
+				showColumnVerticalBorder
+			/>
+		</Stack>
+	);
 }
 
 //Data Grid for Segment
@@ -231,7 +219,6 @@ export function DataGridSegm(segmGrid ,setSegmGrid, SegmHelpModal) {
   }, []);
   
   return (
-    <Box sx={{marginLeft:3}}>
       <Stack direction="column" spacing={0} >
         <Stack direction="row" spacing={0}>
           <IconButton aria-label="Add" color="primary" onClick={addRow}> 
@@ -244,23 +231,17 @@ export function DataGridSegm(segmGrid ,setSegmGrid, SegmHelpModal) {
             <HelpOutlineIcon />
           </IconButton>
         </Stack>
-        <Box sx={{height:220,width:"100%"}}>
-          <DataGrid
-            sx={{fontSize:"14px"}}
+		<MoaDataGrid
             rows={segmGrid}
             columns={columnsSegm}
             disableColumnMenu={true}
             hideFooter={true}
             desity="compact"
-            rowHeight={28}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessRowUpdateError}
-            columnHeaderHeight={28}
             showCellVerticalBorder
             showColumnVerticalBorder
           />
-        </Box>
       </Stack>
-    </Box>
   );
 }
