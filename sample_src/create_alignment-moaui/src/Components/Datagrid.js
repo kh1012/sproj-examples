@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Panel from "@midasit-dev/moaui/Panel";
 import Stack from "@midasit-dev/moaui/Stack";
-import MoaDataGrid from '@midasit-dev/moaui/DataGrid';
+import DataGrid from '@midasit-dev/moaui/DataGrid';
 import { useGridApiContext  } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -159,8 +159,8 @@ export function DataGridAlign(alignGrid, setAlignGrid, AlignHelpModal) {
   }, []);
 
   return (
-		<Stack direction="column" spacing={0} width="100%">
-			<Stack direction="row" spacing={0}>
+		<Stack direction="column" spacing={0} width="100%" height="100%">
+			<Stack direction="row" spacing={0} justifyContent="flex-end">
 				<IconButton aria-label="Add" color="primary" onClick={addRow}>
 					<AddCircleOutlineIcon />
 				</IconButton>
@@ -171,17 +171,16 @@ export function DataGridAlign(alignGrid, setAlignGrid, AlignHelpModal) {
 					<HelpOutlineIcon />
 				</IconButton>
 			</Stack>
-			<MoaDataGrid
-				rows={alignGrid}
-				columns={columnsAlign}
-				disableColumnMenu={true}
-				hideFooter={true}
-				desity="compact"
-				processRowUpdate={processRowUpdate}
-				onProcessRowUpdateError={handleProcessRowUpdateError}
-				showCellVerticalBorder
-				showColumnVerticalBorder
-			/>
+			<Stack marginX={1} height="251px" width="500px">
+				<DataGrid
+					rows={alignGrid}
+					columns={columnsAlign}
+					disableColumnMenu={true}
+					hideFooter
+					processRowUpdate={processRowUpdate}
+					onProcessRowUpdateError={handleProcessRowUpdateError}
+				/>
+			</Stack>
 		</Stack>
 	);
 }
@@ -220,7 +219,7 @@ export function DataGridSegm(segmGrid ,setSegmGrid, SegmHelpModal) {
   
   return (
       <Stack direction="column" spacing={0} >
-        <Stack direction="row" spacing={0}>
+        <Stack direction="row" spacing={0} justifyContent="flex-end">
           <IconButton aria-label="Add" color="primary" onClick={addRow}> 
             <AddCircleOutlineIcon />
           </IconButton>
@@ -231,17 +230,16 @@ export function DataGridSegm(segmGrid ,setSegmGrid, SegmHelpModal) {
             <HelpOutlineIcon />
           </IconButton>
         </Stack>
-		<MoaDataGrid
-            rows={segmGrid}
-            columns={columnsSegm}
-            disableColumnMenu={true}
-            hideFooter={true}
-            desity="compact"
-            processRowUpdate={processRowUpdate}
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-            showCellVerticalBorder
-            showColumnVerticalBorder
-          />
+		<Stack marginX={1} height="251px" width="500px">
+			<DataGrid
+				rows={segmGrid}
+				columns={columnsSegm}
+				disableColumnMenu={true}
+				hideFooter
+				processRowUpdate={processRowUpdate}
+				onProcessRowUpdateError={handleProcessRowUpdateError}
+			/>
+		</Stack>
       </Stack>
   );
 }

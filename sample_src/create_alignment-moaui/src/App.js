@@ -43,7 +43,7 @@ const enqueueMessage = (func, message, variant = "error") => {
 function Seperator() {
 	return (
 		<div width="100%">
-			<Sep />
+			<Sep direction="vertical" />
 		</div>
 	);
 }
@@ -190,28 +190,34 @@ function App() {
   return (
 	<div className="App">
 		<div className="MainApp">
-			<MoaPanel height={700}>
-				<MoaStack direction="row" justifyContent="space-between" alignItems="center" marginX={2} marginY={2}>
+			<MoaPanel height={657}>
+				<MoaStack direction="row" justifyContent="space-between" alignItems="center" marginX={1} marginY={1}>
 					<MoaStack direction="row" spacing={2}>
 						{TextFieldInput("Start Node", nodeStart, setNodeStart)}
 						{TextFieldInput("Start Elem", elemStart, setElemStart)}
 					</MoaStack>
-					<MoaStack direction="row" spacing={2}>
+					<MoaStack direction="row" spacing={1}>
 						{Buttons.MainButton("contained", "Create", checkData)}
 						{Buttons.SubButton("contained", "Data Clear", clearData)}
 					</MoaStack>
 				</MoaStack>
 				<Seperator />
-				{VerticalTabs(
-					tabValue, setTabValue,
-					DataGrids.DataGridAlign(alignGrid, setAlignGrid, AlignModalOpen),
-					DataGrids.DataGridSegm(segmGrid, setSegmGrid, SegmModalOpen)
-				)}
+				<MoaStack height={293}>
+					{VerticalTabs(
+						tabValue, setTabValue,
+						DataGrids.DataGridAlign(alignGrid, setAlignGrid, AlignModalOpen),
+						DataGrids.DataGridSegm(segmGrid, setSegmGrid, SegmModalOpen)
+					)}
+				</MoaStack>
 				<Seperator />
-				<MoaStack height={350} padding={0}>
+				<MoaStack height={295} padding={0}>
 				<div className='userWrap'>
-					<div className='chartStyle'>{Charts.ChartScatter(chartNodeData, chartScale)}</div>
-					<div className='chartStyle'>{Charts.ChartLine(chartLineData, chartScale)}</div>
+					<div className='chartStyle'>
+						{Charts.ChartScatter(chartNodeData, chartScale)}
+					</div>
+					<div className='chartStyle'>
+						{Charts.ChartLine(chartLineData, chartScale)}
+					</div>
 				</div>
 				</MoaStack>
 			</MoaPanel>

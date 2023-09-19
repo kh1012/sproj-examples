@@ -2,6 +2,7 @@ import * as React from "react";
 import MoaTabGroup from "@midasit-dev/moaui/TabGroup";
 import MoaTab from "@midasit-dev/moaui/Tab";
 import MoaStack from "@midasit-dev/moaui/Stack";
+import MoaSeperator from "@midasit-dev/moaui/Seperator";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -34,15 +35,18 @@ export default function VerticalTabs(
 	};
 
 	return (
-		<MoaStack direction="row" height={251}>
-			<MoaTabGroup
-				orientation="vertical"
-				value={value}
-				onChange={(e, v) => handleChange(e, v)}
-			>
-				<MoaTab label="Alignments" value={0} />
-				<MoaTab label="Segments" value={1} />
-			</MoaTabGroup>
+		<MoaStack direction="row" height="100%">
+			<MoaStack width="100px">
+				<MoaTabGroup
+					orientation="vertical"
+					value={value}
+					onChange={(e, v) => handleChange(e, v)}
+				>
+					<MoaTab label="Alignments" value={0} />
+					<MoaTab label="Segments" value={1} />
+				</MoaTabGroup>
+			</MoaStack>
+			<MoaSeperator />
 			<TabPanel value={value} index={0}>
 				{DataGridAlign}
 			</TabPanel>
