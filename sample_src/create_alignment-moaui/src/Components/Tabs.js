@@ -25,12 +25,7 @@ export default function VerticalTabs(
 	DataGridAlign,
 	DataGridSegm
 ) {
-	React.useEffect(() => {
-		console.log(value);
-	}, [value]);
-
 	const handleChange = (event, newValue) => {
-		console.log(newValue);
 		setValue(newValue);
 	};
 

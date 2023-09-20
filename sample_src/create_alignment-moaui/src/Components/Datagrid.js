@@ -1,12 +1,11 @@
 import * as React from 'react';
-import Panel from "@midasit-dev/moaui/Panel";
-import Stack from "@midasit-dev/moaui/Stack";
-import DataGrid from '@midasit-dev/moaui/DataGrid';
+import MoaStack from "@midasit-dev/moaui/Stack";
+import MoaDataGrid from '@midasit-dev/moaui/DataGrid';
+import MoaIconButton from '@midasit-dev/moaui/IconButton';
 import { useGridApiContext  } from '@mui/x-data-grid';
-import IconButton from '@mui/material/IconButton';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import HelpIcon from '@mui/icons-material/Help';
 import DropList from '@midasit-dev/moaui/DropList';
 
 //Select for Line Type in Alignments Data Grid
@@ -126,9 +125,24 @@ const columnsSegm = [
 let alignIdCounter = 0;
 let segmIdCounter = 0;
 
+const IconButtonSet = ({ addRow = () => {}, removeRow = () => {}, helpModal = () => {}}) => {
+	return (
+		<React.Fragment>
+			<MoaIconButton aria-label="Add" onClick={addRow} width={36}>
+					<AddIcon sx={{width: "16px", height: "16px"}} />
+			</MoaIconButton>
+			<MoaIconButton aria-label="Delete" onClick={removeRow} width={36}>
+				<RemoveIcon sx={{width: "16px", height: "16px"}} />
+			</MoaIconButton>
+			<MoaIconButton aria-label="Help" onClick={helpModal} width={36}>
+				<HelpIcon sx={{width: "16px", height: "16px"}} />
+			</MoaIconButton>
+		</React.Fragment>
+	)
+}
+
 //Data Grid for Alignment
 export function DataGridAlign(alignGrid, setAlignGrid, AlignHelpModal) {
-
   function createRow() {
     alignIdCounter = alignGrid.length;
     alignIdCounter += 1;
@@ -159,20 +173,12 @@ export function DataGridAlign(alignGrid, setAlignGrid, AlignHelpModal) {
   }, []);
 
   return (
-		<Stack direction="column" spacing={0} width="100%" height="100%">
-			<Stack direction="row" spacing={0} justifyContent="flex-end">
-				<IconButton aria-label="Add" color="primary" onClick={addRow}>
-					<AddCircleOutlineIcon />
-				</IconButton>
-				<IconButton aria-label="Delete" color="secondary" onClick={removeRow}>
-					<RemoveCircleOutlineIcon />
-				</IconButton>
-				<IconButton aria-label="Help" onClick={AlignHelpModal}>
-					<HelpOutlineIcon />
-				</IconButton>
-			</Stack>
-			<Stack marginX={1} height="251px" width="500px">
-				<DataGrid
+		<MoaStack direction="column" spacing={0} width="100%" height="100%">
+			<MoaStack direction="row" spacing={1} justifyContent="flex-end" marginY={.5}>
+				<IconButtonSet addRow={addRow} removeRow={removeRow} helpModal={AlignHelpModal} />
+			</MoaStack>
+			<MoaStack marginLeft={1} height="251px" width="500px">
+				<MoaDataGrid
 					rows={alignGrid}
 					columns={columnsAlign}
 					disableColumnMenu={true}
@@ -180,8 +186,8 @@ export function DataGridAlign(alignGrid, setAlignGrid, AlignHelpModal) {
 					processRowUpdate={processRowUpdate}
 					onProcessRowUpdateError={handleProcessRowUpdateError}
 				/>
-			</Stack>
-		</Stack>
+			</MoaStack>
+		</MoaStack>
 	);
 }
 
@@ -218,20 +224,12 @@ export function DataGridSegm(segmGrid ,setSegmGrid, SegmHelpModal) {
   }, []);
   
   return (
-      <Stack direction="column" spacing={0} >
-        <Stack direction="row" spacing={0} justifyContent="flex-end">
-          <IconButton aria-label="Add" color="primary" onClick={addRow}> 
-            <AddCircleOutlineIcon />
-          </IconButton>
-          <IconButton aria-label="Delete" color="secondary" onClick={removeRow}> 
-            <RemoveCircleOutlineIcon />
-          </IconButton>
-          <IconButton aria-label="Help" onClick={SegmHelpModal}> 
-            <HelpOutlineIcon />
-          </IconButton>
-        </Stack>
-		<Stack marginX={1} height="251px" width="500px">
-			<DataGrid
+      <MoaStack direction="column" spacing={0} >
+        <MoaStack direction="row" spacing={1} justifyContent="flex-end" marginY={.5}>
+			<IconButtonSet addRow={addRow} removeRow={removeRow} helpModal={SegmHelpModal} />
+        </MoaStack>
+		<MoaStack marginLeft={1} height="251px" width="500px">
+			<MoaDataGrid
 				rows={segmGrid}
 				columns={columnsSegm}
 				disableColumnMenu={true}
@@ -239,7 +237,7 @@ export function DataGridSegm(segmGrid ,setSegmGrid, SegmHelpModal) {
 				processRowUpdate={processRowUpdate}
 				onProcessRowUpdateError={handleProcessRowUpdateError}
 			/>
-		</Stack>
-      </Stack>
+		</MoaStack>
+      </MoaStack>
   );
 }

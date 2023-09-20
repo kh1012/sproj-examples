@@ -191,7 +191,7 @@ function App() {
 	<div className="App">
 		<div className="MainApp">
 			<MoaPanel height={657}>
-				<MoaStack direction="row" justifyContent="space-between" alignItems="center" marginX={1} marginY={1}>
+				<MoaStack direction="row" justifyContent="space-between" alignItems="center" marginY={1}>
 					<MoaStack direction="row" spacing={2}>
 						{TextFieldInput("Start Node", nodeStart, setNodeStart)}
 						{TextFieldInput("Start Elem", elemStart, setElemStart)}
