@@ -1,9 +1,10 @@
+import { VerifyUtil } from 'midas-components';
 export{ midasAPI, convertChartData, chartScaleSet }
 
 async function midasAPI(method, subURL, body) {
-  const baseURL = "https://api-beta.midasit.com:443/civil"
-  const Mapi_Key = "eyJ1ciI6InlqdzA2MDhAbWlkYXNpdC5jb20iLCJwZyI6ImNpdmlsIiwiY24iOiJYQnJ2TldFMFNBIn0.0ecc30a1c43daf4a62d2812d9262814d6f9c8271dfc5d322f1d4023389c4e03e"
-  let res
+  const baseURL = await VerifyUtil.getBaseUrlAsync();
+  const Mapi_Key = VerifyUtil.getMapiKey();
+  let res;
   if (method === "POST" || method === "PUT") {
     res = await fetch(baseURL + subURL, {
       method: method,

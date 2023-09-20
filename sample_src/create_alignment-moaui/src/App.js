@@ -14,6 +14,8 @@ import VerticalTabs from './Components/Tabs';
 import { CreateLayout } from './Function/CreateLayout';
 import { midasAPI, convertChartData, chartScaleSet } from './Function/Common';
 import { checkAllTrue, AlignDataValid, SegmDataValid, NodeElemValid } from './Function/Validation';
+import { VerifyUtil } from "midas-components";
+import MKeyDialog from "./Components/MKeyDialog";
 
 //Data Grid Default Setting
 const AlignDefault = [
@@ -49,6 +51,7 @@ function Seperator() {
 }
 
 function App() {
+	const [showDialog, setDialogShowState] = React.useState(false);
 
   //SnackBar
   const { enqueueSnackbar } = useSnackbar();
@@ -186,9 +189,19 @@ function App() {
 	})
   }, [alignGrid, segmGrid]);
 
+  React.useEffect(() => {
+	if (
+		!VerifyUtil.isExistQueryStrings("redirectTo") &&
+		!VerifyUtil.isExistQueryStrings("mapiKey")
+	) {
+		setDialogShowState(true);
+	}
+}, []);
+
   //Main UI
   return (
 	<div className="App">
+		{showDialog && <MKeyDialog />}
 		<div className="MainApp">
 			<MoaPanel height={657}>
 				<MoaStack direction="row" justifyContent="space-between" alignItems="center" marginY={1}>
